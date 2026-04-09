@@ -215,6 +215,20 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
 .api-st.ok{color:#1D9E75;}
 .api-st.err{color:#A32D2D;}
 .api-tip{font-size:11px;color:#aaa;margin-top:6px;line-height:1.6;}
+.pin-key{background:#2D1B4E;color:#E8D5F0;border:none;border-radius:12px;padding:14px;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;}
+.pin-key:active{background:#4C1D95;transform:scale(0.95);}
+.mgr-tab{flex:1;padding:6px 4px;border-radius:8px;font-size:9px;font-weight:700;text-align:center;cursor:pointer;color:#7C3AED;background:none;border:none;font-family:inherit;-webkit-tap-highlight-color:transparent;}
+.mgr-tab.active{background:#6D28D9;color:#fff;}
+.mgr-section{}
+.mgr-member{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid #F3F0FF;}
+.mgr-member:last-child{border-bottom:none;}
+.mgr-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.mgr-bar-bg{height:5px;background:#F3F0FF;border-radius:3px;margin-top:3px;overflow:hidden;}
+.mgr-bar{height:100%;border-radius:3px;}
+.mgr-alert{font-size:9px;padding:2px 6px;border-radius:7px;font-weight:700;flex-shrink:0;}
+.mgr-bubble-user{background:#6D28D9;color:#fff;border-radius:14px 14px 4px 14px;padding:8px 12px;font-size:11px;line-height:1.6;align-self:flex-end;max-width:85%;}
+.mgr-bubble-ai{background:#F3F0FF;border:0.5px solid #DDD6FE;border-radius:14px 14px 14px 4px;padding:8px 12px;font-size:11px;line-height:1.6;color:#2C2C2A;max-width:95%;}
+.mgr-ai-lbl{font-size:9px;font-weight:700;color:#6D28D9;margin-bottom:3px;}
 
 /* ── 同期ステータス ── */
 .sync-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;}
@@ -389,6 +403,103 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
     <div id="score-inps"></div>
     <div class="btn-row"><button class="btn btn-pink" onclick="saveScores()">保存する</button></div>
     <div class="saved" id="score-saved">✓ 保存しました！</div>
+  </div>
+  <div style="text-align:center;padding:8px 0 4px;">
+    <button onclick="openManager()" style="background:none;border:none;font-size:10px;color:#ccc;cursor:pointer;font-family:inherit;">⚙</button>
+  </div>
+</div>
+
+<!-- ファミリーマネージャー画面 -->
+<div id="manager-screen" style="display:none;position:absolute;top:0;left:0;right:0;z-index:200;min-height:100%;">
+
+  <!-- PINロック画面 -->
+  <div id="pin-screen" style="background:#1E1035;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;">
+    <div style="font-size:40px;margin-bottom:12px;">🛡️</div>
+    <div style="font-size:17px;font-weight:700;color:#E8D5F0;margin-bottom:4px;">ファミリーマネージャー</div>
+    <div style="font-size:12px;color:#9980AA;margin-bottom:28px;">4桁PINコードを入力してください</div>
+    <div style="display:flex;gap:14px;margin-bottom:24px;" id="pin-dots">
+      <div style="width:14px;height:14px;border-radius:50%;border:2px solid #6D28D9;" id="pd0"></div>
+      <div style="width:14px;height:14px;border-radius:50%;border:2px solid #6D28D9;" id="pd1"></div>
+      <div style="width:14px;height:14px;border-radius:50%;border:2px solid #6D28D9;" id="pd2"></div>
+      <div style="width:14px;height:14px;border-radius:50%;border:2px solid #6D28D9;" id="pd3"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:220px;margin-bottom:16px;">
+      <button class="pin-key" onclick="pinKey('1')">1</button>
+      <button class="pin-key" onclick="pinKey('2')">2</button>
+      <button class="pin-key" onclick="pinKey('3')">3</button>
+      <button class="pin-key" onclick="pinKey('4')">4</button>
+      <button class="pin-key" onclick="pinKey('5')">5</button>
+      <button class="pin-key" onclick="pinKey('6')">6</button>
+      <button class="pin-key" onclick="pinKey('7')">7</button>
+      <button class="pin-key" onclick="pinKey('8')">8</button>
+      <button class="pin-key" onclick="pinKey('9')">9</button>
+      <button class="pin-key" onclick="pinKey('del')" style="background:#3D2060;">⌫</button>
+      <button class="pin-key" onclick="pinKey('0')">0</button>
+      <button class="pin-key" onclick="closeManager()" style="background:#3D2060;font-size:11px;">×</button>
+    </div>
+    <div id="pin-error" style="font-size:12px;color:#F87171;display:none;">PINが違います</div>
+  </div>
+
+  <!-- マネージャー本体 -->
+  <div id="mgr-body" style="display:none;background:#F5F0FF;min-height:100vh;">
+    <div style="background:#1E1035;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#E8D5F0;">🛡️ ファミリーマネージャー</div>
+        <div style="font-size:9px;color:#9980AA;margin-top:1px;">江本さん専用 · 非公開</div>
+      </div>
+      <button onclick="closeManager()" style="background:#3D2060;color:#C4B5FD;border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">× 閉じる</button>
+    </div>
+
+    <div style="padding:12px;display:flex;flex-direction:column;gap:10px;">
+
+      <!-- タブ -->
+      <div style="display:flex;gap:5px;background:#EDE9FE;border-radius:10px;padding:3px;">
+        <button class="mgr-tab active" onclick="mgrTab('family',this)">👨‍👩‍👧 家族の関与</button>
+        <button class="mgr-tab" onclick="mgrTab('report',this)">📊 週次レポート</button>
+        <button class="mgr-tab" onclick="mgrTab('chat',this)">💬 相談する</button>
+      </div>
+
+      <!-- 家族の関与タブ -->
+      <div id="mgr-family" class="mgr-section">
+        <div style="background:#fff;border-radius:12px;padding:12px;border:0.5px solid #DDD6FE;">
+          <div style="font-size:11px;font-weight:700;color:#1E1035;margin-bottom:10px;">👨‍👩‍👧 今週の家族関与度</div>
+          <div id="family-stats"><div style="font-size:12px;color:#aaa;text-align:center;padding:16px;">読み込み中…</div></div>
+        </div>
+        <div style="background:#fff;border-radius:12px;padding:12px;border:0.5px solid #DDD6FE;">
+          <div style="font-size:11px;font-weight:700;color:#1E1035;margin-bottom:9px;">📓 今週の日記ハイライト</div>
+          <div id="diary-highlights"><div style="font-size:12px;color:#aaa;text-align:center;padding:12px;">読み込み中…</div></div>
+        </div>
+      </div>
+
+      <!-- 週次レポートタブ -->
+      <div id="mgr-report" class="mgr-section" style="display:none;">
+        <div style="background:#1E1035;border-radius:12px;padding:13px;border:1px solid #4C1D95;">
+          <div style="font-size:9px;font-weight:700;color:#C4B5FD;background:#4C1D95;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:8px;">📊 Claudeの週次分析</div>
+          <div id="weekly-report"><div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#9980AA;"><div class="spinner" style="border-color:#4C1D95;border-top-color:#C4B5FD;"></div>Claudeが分析中…</div></div>
+        </div>
+        <div style="background:#fff;border-radius:12px;padding:12px;border:0.5px solid #DDD6FE;">
+          <div style="font-size:11px;font-weight:700;color:#1E1035;margin-bottom:9px;">😊 今週の気持ち推移</div>
+          <div style="display:flex;gap:4px;align-items:flex-end;height:50px;margin-bottom:4px;" id="mgr-mood-chart"></div>
+        </div>
+      </div>
+
+      <!-- 相談タブ -->
+      <div id="mgr-chat" class="mgr-section" style="display:none;">
+        <div style="background:#fff;border-radius:12px;padding:12px;border:0.5px solid #DDD6FE;">
+          <div style="font-size:11px;font-weight:700;color:#1E1035;margin-bottom:9px;">💬 Claudeに相談する</div>
+          <div style="background:#F3F0FF;border-radius:9px;padding:9px 11px;border:0.5px solid #DDD6FE;margin-bottom:10px;">
+            <div style="font-size:9px;font-weight:700;color:#6D28D9;margin-bottom:4px;">📎 現在の姪っ子さんの状態（自動取得）</div>
+            <div style="font-size:10px;color:#555;line-height:1.5;" id="mgr-context">読み込み中…</div>
+          </div>
+          <div id="mgr-chat-msgs" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;min-height:60px;"></div>
+          <div style="display:flex;gap:6px;">
+            <input id="mgr-chat-inp" style="flex:1;border:1px solid #DDD6FE;border-radius:20px;padding:8px 12px;font-size:12px;background:#fff;color:#2C2C2A;font-family:inherit;" placeholder="姪っ子さんについて相談する…" />
+            <button onclick="sendMgrChat()" style="background:#6D28D9;color:#fff;border:none;border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">↑</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -1142,6 +1253,235 @@ function renderAll() {
 /* ════ 起動 ════ */
 loadAll();
 setInterval(updateCD, 30000);
+
+/* ════ ファミリーマネージャー ════ */
+let pinInput = '';
+let mgrContextCache = '';
+let mgrChatHistory = [];
+
+function openManager() {
+  const screen = document.getElementById('manager-screen');
+  if(screen) {
+    screen.style.display = 'block';
+    window.scrollTo(0,0);
+    pinInput = '';
+    updatePinDots();
+    document.getElementById('pin-error').style.display = 'none';
+    document.getElementById('pin-screen').style.display = 'flex';
+    document.getElementById('mgr-body').style.display = 'none';
+  }
+}
+
+function closeManager() {
+  const screen = document.getElementById('manager-screen');
+  if(screen) screen.style.display = 'none';
+  pinInput = '';
+}
+
+window.openManager = openManager;
+window.closeManager = closeManager;
+
+window.pinKey = function(k) {
+  if(k === 'del') { pinInput = pinInput.slice(0,-1); updatePinDots(); return; }
+  if(pinInput.length >= 4) return;
+  pinInput += k;
+  updatePinDots();
+  if(pinInput.length === 4) setTimeout(checkPin, 200);
+};
+
+function updatePinDots() {
+  for(let i=0;i<4;i++) {
+    const d = document.getElementById('pd'+i);
+    if(d) { d.style.background = i < pinInput.length ? '#6D28D9' : 'transparent'; }
+  }
+}
+
+async function checkPin() {
+  const savedPin = await fsGet(doc(db,'families',FAMILY_ID,'data','managerPin'));
+  const correctPin = (savedPin && savedPin.pin) ? savedPin.pin : '1234';
+  if(pinInput === correctPin) {
+    document.getElementById('pin-screen').style.display = 'none';
+    document.getElementById('mgr-body').style.display = 'block';
+    loadManagerData();
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+    pinInput = '';
+    updatePinDots();
+    setTimeout(()=>{ document.getElementById('pin-error').style.display='none'; }, 2000);
+  }
+}
+
+window.mgrTab = function(name, el) {
+  document.querySelectorAll('.mgr-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mgr-section').forEach(s=>s.style.display='none');
+  el.classList.add('active');
+  document.getElementById('mgr-'+name).style.display='block';
+  if(name==='report') loadWeeklyReport();
+  if(name==='chat') loadMgrContext();
+};
+
+async function loadManagerData() {
+  await loadFamilyStats();
+  await loadDiaryHighlights();
+  await loadMgrContext();
+  renderMgrMoodChart();
+}
+
+async function loadFamilyStats() {
+  const el = document.getElementById('family-stats'); if(!el) return;
+  try {
+    const diarySnap = await getDocs(query(diariesCol(), orderBy('createdAt','desc')));
+    const counts = {mama:0, ojii:0, obaa:0};
+    const lastSeen = {mama:'なし', ojii:'なし', obaa:'なし'};
+    for(const d of diarySnap.docs.slice(0,10)) {
+      const cmts = await getDocs(cmtsCol(d.id));
+      cmts.docs.forEach(c => {
+        const data = c.data();
+        if(data.who && counts[data.who] !== undefined) {
+          counts[data.who]++;
+          if(lastSeen[data.who]==='なし') lastSeen[data.who] = d.data().date || '最近';
+        }
+      });
+    }
+    const total = Math.max(Object.values(counts).reduce((a,b)=>a+b,0), 1);
+    const members = [
+      {who:'mama', name:'ママ', ico:'👩', bg:'#FBEAF0', color:'#D4537E'},
+      {who:'ojii', name:'おじいちゃん', ico:'👴', bg:'#EAF3DE', color:'#27500A'},
+      {who:'obaa', name:'おばあちゃん', ico:'👵', bg:'#FAEEDA', color:'#854F0B'},
+    ];
+    el.innerHTML = members.map(m => {
+      const cnt = counts[m.who];
+      const pct = Math.min(Math.round(cnt/total*100)*2, 100);
+      const alertBg = cnt===0?'#FCEBEB':cnt<3?'#FAEEDA':'#E1F5EE';
+      const alertTxt = cnt===0?'#A32D2D':cnt<3?'#854F0B':'#085041';
+      const alertLabel = cnt===0?'⚠ 未参加':cnt<3?'△ 要声かけ':'◎ 良好';
+      return '<div class="mgr-member">'
+        +'<div class="mgr-av" style="background:'+m.bg+';">'+m.ico+'</div>'
+        +'<div style="flex:1;">'
+        +'<div style="font-size:11px;font-weight:700;color:#1E1035;">'+m.name+'</div>'
+        +'<div style="font-size:9px;color:#888;margin-top:1px;">コメント'+cnt+'回 · 最終: '+lastSeen[m.who]+'</div>'
+        +'<div class="mgr-bar-bg"><div class="mgr-bar" style="width:'+pct+'%;background:'+m.color+';"></div></div>'
+        +'</div>'
+        +'<div style="font-size:14px;font-weight:800;color:'+m.color+';min-width:20px;text-align:right;">'+cnt+'</div>'
+        +'<div class="mgr-alert" style="background:'+alertBg+';color:'+alertTxt+';">'+alertLabel+'</div>'
+        +'</div>';
+    }).join('');
+  } catch(e) { el.innerHTML = '<div style="font-size:12px;color:#aaa;padding:8px;">データ取得中…</div>'; }
+}
+
+async function loadDiaryHighlights() {
+  const el = document.getElementById('diary-highlights'); if(!el) return;
+  try {
+    const snap = await getDocs(query(diariesCol(), orderBy('createdAt','desc')));
+    const recent = snap.docs.slice(0,3);
+    if(!recent.length) { el.innerHTML='<div style="font-size:12px;color:#aaa;text-align:center;padding:12px;">まだ日記がありません</div>'; return; }
+    const MM = {happy:{txt:'さいこう！',bg:'#E1F5EE',c:'#085041'},ok:{txt:'まあまあ',bg:'#EEEDFE',c:'#3C3489'},tired:{txt:'つかれた',bg:'#FAEEDA',c:'#854F0B'},sad:{txt:'くじけそう',bg:'#FCEBEB',c:'#A32D2D'},fire:{txt:'やるぞ！',bg:'#FBEAF0',c:'#993556'}};
+    el.innerHTML = recent.map(d => {
+      const data = d.data();
+      const ml = MM[data.mood]||{txt:'',bg:'#F1EFE8',c:'#888780'};
+      const preview = (data.text||'').length>60?(data.text||'').slice(0,60)+'…':(data.text||'');
+      return '<div style="padding:8px 10px;border-radius:8px;border-left:3px solid #6D28D9;background:#FAF7FC;margin-bottom:6px;">'
+        +'<div style="font-size:9px;color:#aaa;margin-bottom:2px;">'+(data.date||'')+'</div>'
+        +'<div style="font-size:11px;color:#2C2C2A;line-height:1.5;">'+preview+'</div>'
+        +'<span style="display:inline-block;font-size:9px;padding:1px 6px;border-radius:6px;margin-top:3px;font-weight:600;background:'+ml.bg+';color:'+ml.c+';">'+ml.txt+'</span>'
+        +'</div>';
+    }).join('');
+  } catch(e) { el.innerHTML = '<div style="font-size:12px;color:#aaa;padding:8px;">読み込みに失敗しました</div>'; }
+}
+
+async function loadWeeklyReport() {
+  const el = document.getElementById('weekly-report'); if(!el) return;
+  if(!getApiKey()) { el.innerHTML='<div style="font-size:12px;color:#9980AA;">APIキーを設定するとClaudeが分析します</div>'; return; }
+  const weekKey = getWeekKey(0);
+  const cached = await fsGet(doc(db,'families',FAMILY_ID,'data','weeklyReport'));
+  if(cached && cached.weekKey===weekKey && cached.text) { renderWeeklyReport(cached.text, cached.tags, cached.advice); return; }
+  el.innerHTML = '<div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#9980AA;"><div class="spinner" style="border-color:#4C1D95;border-top-color:#C4B5FD;"></div>Claudeが今週を分析中…</div>';
+  try {
+    const snap = await getDocs(query(diariesCol(), orderBy('createdAt','desc')));
+    const weekDiaries = snap.docs.slice(0,7).map(d=>d.data());
+    const ctx = weekDiaries.map(d=>'・'+(d.date||'')+'（'+(MOOD_JP[d.mood]||d.mood)+'）「'+((d.text||'').slice(0,50))+'」').join('
+');
+    const total = (state.weekTime||[]).reduce((a,b)=>a+b,0);
+    const prompt = 'あなたは小学6年生の姪っ子（'+( state.school||'志望校')+'受験予定）を応援する家族へのアドバイザーです。
+今週の記録：
+'+ctx+'
+勉強時間合計：'+total+'分
+
+この子の保護者（叔父）へ向けて、以下のJSONで今週の分析レポートを書いてください（他の文字は不要）：
+{"text":"今週の状態分析（150字以内、具体的に）","tags":["タグ1","タグ2","タグ3"],"advice":"今週一番大切な声かけアドバイス（80字以内）"}';
+    const raw = await callClaude(prompt, 400);
+    const json = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    await fsSet(doc(db,'families',FAMILY_ID,'data','weeklyReport'), {weekKey, text:json.text, tags:json.tags, advice:json.advice});
+    renderWeeklyReport(json.text, json.tags, json.advice);
+  } catch(e) { el.innerHTML='<div style="font-size:12px;color:#9980AA;">分析に失敗しました。再度お試しください。</div>'; }
+}
+
+function renderWeeklyReport(text, tags, advice) {
+  const el = document.getElementById('weekly-report'); if(!el) return;
+  const tagBgs = ['#E1F5EE:#085041','#FBEAF0:#993556','#FAEEDA:#854F0B','#EEEDFE:#3C3489'];
+  const tagHtml = (tags||[]).map((t,i)=>{const parts=tagBgs[i%4].split(':');return '<span style="font-size:9px;padding:2px 8px;border-radius:8px;font-weight:700;background:'+parts[0]+';color:'+parts[1]+';">'+t+'</span>';}).join('');
+  el.innerHTML = '<div style="font-size:12px;color:#E8D5F0;line-height:1.7;margin-bottom:10px;">'+text+'</div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:'+(advice?'10px':'0')+';">'+tagHtml+'</div>'
+    +(advice?'<div style="background:#1A0F1E;border-radius:8px;padding:9px 11px;"><div style="font-size:9px;font-weight:700;color:#A78BFA;margin-bottom:3px;">👨‍👩‍👧 今週の声かけアドバイス</div><div style="font-size:11px;color:#C4B5FD;line-height:1.6;">'+advice+'</div></div>':'');
+}
+
+function renderMgrMoodChart() {
+  const el = document.getElementById('mgr-mood-chart'); if(!el) return;
+  const labels = ['月','火','水','木','金','土','日'];
+  const maxT = Math.max(...(state.weekTime||[1]), 1);
+  el.innerHTML = labels.map((l,i) => {
+    const done = state.weekDone[i];
+    const mins = state.weekTime[i]||0;
+    const h = done ? Math.max(Math.round(mins/maxT*40), 6) : 4;
+    const bg = done ? '#C4B5FD' : '#EDE8EA';
+    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">'
+      +'<div style="width:100%;border-radius:3px 3px 0 0;height:'+h+'px;background:'+bg+';"></div>'
+      +'<div style="font-size:8px;color:#aaa;">'+l+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+async function loadMgrContext() {
+  const el = document.getElementById('mgr-context'); if(!el) return;
+  try {
+    const snap = await getDocs(query(diariesCol(), orderBy('createdAt','desc')));
+    const recent = snap.docs.slice(0,3).map(d=>d.data());
+    const moods = recent.map(d=>MOOD_JP[d.mood]||d.mood).join('・');
+    const total = (state.weekTime||[]).reduce((a,b)=>a+b,0);
+    const remaining = state.examDate?Math.ceil((new Date(state.examDate+'T00:00:00')-new Date())/86400000):null;
+    mgrContextCache = '志望校：'+(state.school||'未設定')+' / 受験まで'+(remaining!=null?remaining+'日':'不明')+' / 今週勉強'+total+'分 / 最近の気持ち：'+(moods||'記録なし');
+    el.textContent = mgrContextCache;
+  } catch(e) { el.textContent = '状態を取得できませんでした'; }
+}
+
+window.sendMgrChat = async function() {
+  const inp = document.getElementById('mgr-chat-inp');
+  const msgs = document.getElementById('mgr-chat-msgs');
+  if(!inp||!inp.value.trim()||!msgs) return;
+  const userMsg = inp.value.trim();
+  inp.value = '';
+  const userBubble = document.createElement('div');
+  userBubble.className = 'mgr-bubble-user';
+  userBubble.textContent = userMsg;
+  msgs.appendChild(userBubble);
+  const aiBubble = document.createElement('div');
+  aiBubble.className = 'mgr-bubble-ai';
+  aiBubble.innerHTML = '<div class="mgr-ai-lbl">🤖 Claude</div><div class="spinner" style="border-color:#DDD6FE;border-top-color:#6D28D9;width:14px;height:14px;border-width:2px;"></div>';
+  msgs.appendChild(aiBubble);
+  msgs.scrollTop = msgs.scrollHeight;
+  const prompt = 'あなたは小学6年生の受験生の家族（叔父）をサポートするアドバイザーです。
+現在の姪っ子さんの状態：'+mgrContextCache+'
+この情報を踏まえて、具体的で温かいアドバイスを150字以内で返してください。
+
+相談：'+userMsg;
+  try {
+    const raw = await callClaude(prompt, 300);
+    aiBubble.innerHTML = '<div class="mgr-ai-lbl">🤖 Claude</div>'+raw;
+  } catch(e) {
+    aiBubble.innerHTML = '<div class="mgr-ai-lbl">🤖 Claude</div>申し訳ありません、もう一度お試しください。';
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+};
 </script>
 </body>
 </html>
