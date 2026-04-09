@@ -6,324 +6,269 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="受験手帳">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23D4537E'/><text y='.9em' font-size='80' x='10'>📖</text></svg>">
 <title>受験がんばり手帳</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Hiragino Kuma Gothic ProN','Hiragino Sans','Yu Gothic',sans-serif;background:#FDF6F9;color:#2C2C2A;min-height:100vh;overscroll-behavior:none;}
-.app{max-width:480px;margin:0 auto;padding:0 0 84px;background:#FDF6F9;min-height:100vh;}
-
-/* ══ iPad対応 ══ */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Kuma Gothic ProN','Hiragino Sans','Yu Gothic',sans-serif;background:#FDF6F9;color:#2C2C2A;min-height:100vh;}
+.app{max-width:480px;margin:0 auto;padding:0 0 80px;background:#FDF6F9;min-height:100vh;}
 @media(min-width:768px){
   body{background:#F0E8EE;}
-  .app{max-width:720px;box-shadow:0 0 40px rgba(212,83,126,0.08);border-radius:0;min-height:100vh;}
+  .app{max-width:720px;min-height:100vh;}
+  nav{max-width:720px;}
   .section{padding:16px 20px 0;}
-  nav{max-width:720px;border-radius:0;}
-  .nb{min-width:80px;padding:4px 10px;}
-  .nb-ico{font-size:22px;}
-  .nb-lbl{font-size:10px;}
-  .header{padding:16px 24px 12px;}
-  .app-title{font-size:24px;}
-  .cd-num{font-size:28px;}
-  .cd-box{width:84px;padding:8px 0;}
-
-  /* iPad 2カラムグリッド */
+  .nb{min-width:80px;}
   .ipad-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
   .ipad-grid .card{margin-bottom:0;}
   .ipad-full{grid-column:1/-1;}
-
-  /* カードのフォント少し大きめ */
-  .card{padding:16px;}
-  .card-title{font-size:14px;}
-  .diary-body{font-size:14px;}
-  .plan-txt{font-size:13px;}
-  .inp{font-size:14px;padding:10px 13px;}
-  .txa{font-size:14px;}
-  .btn{font-size:14px;padding:10px 22px;}
-  .section-title{font-size:17px;}
 }
-@media(min-width:1024px){
-  .app{max-width:800px;}
-  nav{max-width:800px;}
-}
+@media(min-width:1024px){.app{max-width:800px;}nav{max-width:800px;}}
 
-/* ══ ヘッダー ══ */
-.header{text-align:center;padding:12px 16px 10px;background:#fff;border-bottom:1px solid #EDD5DE;position:sticky;top:0;z-index:50;}
-.school-pill{font-size:12px;color:#993556;font-weight:700;background:#FBEAF0;padding:3px 14px;border-radius:20px;display:inline-block;margin-bottom:5px;border:1px solid #F4C0D1;}
-.app-title{font-size:20px;font-weight:800;color:#2C2C2A;letter-spacing:-0.3px;}
-.exam-sub{font-size:11px;color:#AAA;margin-top:2px;}
-.cd-row{display:flex;justify-content:center;gap:8px;margin:9px 0 2px;}
-.cd-box{background:#FBEAF0;border-radius:10px;padding:6px 0;text-align:center;width:72px;border:1px solid #F4C0D1;}
+.header{text-align:center;padding:1rem 1rem 0.6rem;background:#fff;border-bottom:0.5px solid #e8d5de;position:sticky;top:0;z-index:50;}
+.school-pill{font-size:12px;color:#993556;font-weight:700;background:#FBEAF0;padding:3px 12px;border-radius:20px;display:inline-block;margin-bottom:4px;border:1px solid #F4C0D1;}
+.header-title{font-size:20px;font-weight:800;color:#2C2C2A;}
+.header-sub{font-size:11px;color:#aaa;margin-top:1px;}
+.cd-row{display:flex;justify-content:center;gap:8px;margin:7px 0 2px;}
+.cd-box{background:#FBEAF0;border-radius:10px;padding:5px 14px;text-align:center;min-width:60px;border:1px solid #F4C0D1;}
 .cd-num{font-size:24px;font-weight:800;color:#D4537E;line-height:1;}
 .cd-lbl{font-size:10px;color:#993556;font-weight:600;margin-top:1px;}
 
-/* ══ ボトムナビ ══ */
-nav{display:flex;background:#fff;border-top:1px solid #EDD5DE;padding:6px 0 max(env(safe-area-inset-bottom),6px);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;justify-content:space-around;}
-.nb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:2px 6px;cursor:pointer;border:none;background:none;min-width:48px;}
-.nb-ico{font-size:20px;line-height:1;transition:transform 0.15s;}
-.nb-lbl{font-size:9px;color:#AAA;font-weight:600;transition:color 0.15s;}
+/* ── ナビ ── */
+nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(env(safe-area-inset-bottom),5px);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;justify-content:space-around;}
+.nb{display:flex;flex-direction:column;align-items:center;gap:1px;padding:3px 5px;cursor:pointer;border:none;background:none;min-width:46px;-webkit-tap-highlight-color:transparent;}
+.nb-ico{font-size:19px;line-height:1;}
+.nb-lbl{font-size:9px;color:#aaa;font-weight:600;}
 .nb.on .nb-lbl{color:#D4537E;}
-.nb.on .nb-ico{transform:scale(1.12);}
+.nb.on .nb-ico{transform:scale(1.1);}
 
-/* ══ セクション ══ */
-.sec{display:none;padding:12px 12px 0;animation:fadeIn 0.18s ease;}
-.sec.on{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-
-/* ══ カード ══ */
-.card{background:#fff;border:1px solid #EDD5DE;border-radius:14px;padding:14px;margin-bottom:12px;}
-.card-ttl{font-size:13px;font-weight:700;color:#2C2C2A;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.sec-ttl{font-size:15px;font-weight:800;color:#2C2C2A;margin:2px 1px 12px;}
-
-/* ══ フォーム部品 ══ */
-input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{
-  border:1px solid #D3C0C8;border-radius:9px;padding:9px 12px;font-size:13px;
-  background:#fff;color:#2C2C2A;font-family:inherit;width:100%;
-  -webkit-appearance:none;appearance:none;}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#D4537E;box-shadow:0 0 0 3px rgba(212,83,126,0.12);}
-textarea{min-height:68px;resize:vertical;line-height:1.65;}
-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
-.frow{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
-.flbl{font-size:12px;color:#888;min-width:50px;font-weight:600;flex-shrink:0;}
-
-/* ══ ボタン ══ */
-.btn{padding:10px 20px;border-radius:22px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.15s;}
-.btn:active{transform:scale(0.96);}
+/* ── 共通 ── */
+.section{display:none;padding:11px 11px 0;}
+.section.on{display:block;}
+.card{background:#fff;border:0.5px solid #e8d5de;border-radius:13px;padding:13px;margin-bottom:11px;}
+.card-ttl{font-size:13px;font-weight:700;color:#2C2C2A;margin-bottom:9px;display:flex;align-items:center;gap:5px;}
+.sec-ttl{font-size:15px;font-weight:800;color:#2C2C2A;margin:3px 0 11px 1px;}
+.inp{border:1px solid #D3C0C8;border-radius:9px;padding:8px 11px;font-size:13px;background:#fff;color:#2C2C2A;width:100%;font-family:inherit;}
+.inp:focus{outline:none;border-color:#D4537E;box-shadow:0 0 0 3px rgba(212,83,126,0.1);}
+.sel{border:1px solid #D3C0C8;border-radius:9px;padding:8px 9px;font-size:12px;background:#fff;color:#2C2C2A;font-family:inherit;}
+.txa{border:1px solid #D3C0C8;border-radius:11px;padding:9px 11px;width:100%;font-size:13px;min-height:65px;resize:vertical;background:#fff;color:#2C2C2A;font-family:inherit;line-height:1.6;}
+.txa:focus{outline:none;border-color:#D4537E;box-shadow:0 0 0 3px rgba(212,83,126,0.1);}
+.frow{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.flbl{font-size:12px;color:#aaa;min-width:50px;font-weight:600;flex-shrink:0;}
+.btn{padding:9px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;}
 .btn-pink{background:#D4537E;color:#fff;}
-.btn-pink:active{background:#993556;}
+.btn-pink:active{background:#993556;transform:scale(0.97);}
 .btn-purple{background:#7F77DD;color:#fff;}
 .btn-purple:active{background:#534AB7;}
-.btn-sm{padding:6px 12px;font-size:11px;border-radius:12px;border:1px solid #D3C0C8;background:#F5F5F3;color:#2C2C2A;cursor:pointer;font-family:inherit;font-weight:600;}
-.btn-del{padding:4px 9px;font-size:10px;border-radius:7px;border:none;background:#FCEBEB;color:#A32D2D;cursor:pointer;font-weight:700;font-family:inherit;}
-.btn-row{display:flex;justify-content:flex-end;margin-top:10px;gap:8px;}
-.saved{font-size:12px;color:#1D9E75;margin-top:5px;display:none;font-weight:700;}
+.btn-sm{padding:5px 11px;font-size:11px;border-radius:12px;border:1px solid #D3C0C8;background:#F5F5F3;color:#2C2C2A;cursor:pointer;font-family:inherit;font-weight:600;}
+.btn-del{padding:4px 8px;font-size:10px;border-radius:7px;border:none;background:#FCEBEB;color:#A32D2D;cursor:pointer;font-weight:600;font-family:inherit;}
+.btn-row{display:flex;justify-content:flex-end;margin-top:9px;gap:7px;}
+.saved{font-size:12px;color:#1D9E75;margin-top:5px;display:none;font-weight:600;}
 
-/* ══ スピナー ══ */
-.spinner{width:15px;height:15px;border:2px solid #AFA9EC;border-top-color:#7F77DD;border-radius:50%;animation:spin 0.75s linear infinite;flex-shrink:0;}
-.spin-row{display:flex;align-items:center;gap:8px;font-size:12px;color:#7F77DD;padding:4px 0;}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ══ ホーム：AIバナー ══ */
-.ai-banner{background:#EEEDFE;border-radius:14px;padding:14px;margin-bottom:12px;border:1px solid #C5C0F0;}
-.ai-tag{font-size:10px;font-weight:700;color:#3C3489;background:#CECBF6;padding:2px 10px;border-radius:9px;display:inline-block;margin-bottom:7px;}
-.ai-msg{font-size:14px;font-weight:700;color:#26215C;line-height:1.65;}
-.ai-action-box{background:#fff;border-radius:9px;padding:9px 11px;border:1px solid #C5C0F0;margin-top:9px;}
-.ai-action-lbl{font-size:10px;font-weight:700;color:#7F77DD;margin-bottom:2px;}
-.ai-action-txt{font-size:12px;color:#2C2C2A;line-height:1.6;}
-.ai-refresh{margin-top:9px;font-size:11px;color:#7F77DD;background:none;border:none;cursor:pointer;font-family:inherit;font-weight:700;padding:0;}
-.ai-refresh:active{opacity:0.6;}
-
-/* ══ 次のイベント ══ */
-.next-evt{background:#E1F5EE;border-radius:12px;padding:11px 13px;border:1px solid #9FE1CB;margin-bottom:12px;}
+/* ── ホーム ── */
+.ai-banner{background:#EEEDFE;border-radius:13px;padding:13px;margin-bottom:11px;border:1px solid #AFA9EC;}
+.ai-tag{font-size:10px;font-weight:700;color:#3C3489;background:#CECBF6;padding:2px 9px;border-radius:9px;display:inline-block;margin-bottom:7px;}
+.ai-msg{font-size:14px;font-weight:700;color:#26215C;line-height:1.6;}
+.ai-act{background:#fff;border-radius:8px;padding:8px 10px;border:0.5px solid #AFA9EC;margin-top:8px;font-size:12px;color:#2C2C2A;line-height:1.5;}
+.ai-act-lbl{font-size:10px;font-weight:700;color:#7F77DD;margin-bottom:2px;}
+.spin-row{display:flex;align-items:center;gap:8px;font-size:12px;color:#7F77DD;}
+.spinner{width:15px;height:15px;border:2px solid #AFA9EC;border-top-color:#7F77DD;border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.next-evt{background:#E1F5EE;border-radius:11px;padding:11px 13px;border:1px solid #9FE1CB;margin-bottom:11px;}
 .next-lbl{font-size:10px;color:#0F6E56;font-weight:700;margin-bottom:3px;}
-.next-name{font-size:13px;font-weight:700;}
-.next-sub{font-size:11px;color:#555;margin-top:2px;}
-.next-pill{font-size:11px;color:#854F0B;background:#FAEEDA;padding:2px 8px;border-radius:7px;display:inline-block;margin-top:5px;font-weight:700;}
-
-/* ══ プログレスバー ══ */
-.prog-bg{background:#EDE8EA;border-radius:8px;height:11px;margin:6px 0;overflow:hidden;}
-.prog-bar{height:100%;border-radius:8px;background:linear-gradient(to right,#9FE1CB,#5DCAA5);transition:width 0.5s ease;}
-.prog-lbl{display:flex;justify-content:space-between;font-size:10px;color:#AAA;font-weight:600;}
-
-/* ══ 週カレンダー ══ */
-.wk-head{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px;}
-.wk-head span{font-size:10px;color:#AAA;text-align:center;font-weight:600;}
+.prog-bg{background:#EDE8EA;border-radius:7px;height:10px;margin:5px 0;overflow:hidden;}
+.prog-bar{height:100%;border-radius:7px;background:#9FE1CB;transition:width 0.4s;}
+.prog-lbl{display:flex;justify-content:space-between;font-size:10px;color:#aaa;font-weight:500;}
+.wk-head{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px;}
+.wk-head span{font-size:10px;color:#aaa;text-align:center;font-weight:600;}
 .wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.dc{border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid transparent;padding:5px 2px;min-height:46px;}
+.dc{border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid transparent;padding:5px 2px;min-height:44px;-webkit-tap-highlight-color:transparent;}
 .dc-lbl{font-size:10px;font-weight:700;}
 .dc-time{font-size:9px;margin-top:2px;font-weight:600;}
 .dc.done{background:#9FE1CB;color:#085041;border-color:#5DCAA5;}
 .dc.today{border-color:#D4537E;background:#FBEAF0;color:#993556;}
-.dc.empty{background:#F5F5F3;color:#AAA;}
-.dc:active{transform:scale(0.9);}
-.time-row{display:flex;gap:6px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid #F0EAE8;}
-.time-lbl{font-size:11px;color:#AAA;font-weight:600;flex-shrink:0;}
-.week-sum{font-size:11px;color:#AAA;margin-top:7px;}
-.week-sum b{color:#D4537E;font-weight:700;}
+.dc.empty{background:#F5F5F3;color:#aaa;}
+.dc:active{transform:scale(0.92);}
+.time-row{display:flex;gap:6px;align-items:center;margin-top:9px;padding-top:9px;border-top:0.5px solid #EDE8EA;flex-wrap:wrap;}
+.time-lbl{font-size:11px;color:#aaa;font-weight:600;flex-shrink:0;}
+.subj-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.subj-nm{font-size:12px;font-weight:700;min-width:32px;}
+.subj-bg{flex:1;background:#EDE8EA;border-radius:4px;height:9px;overflow:hidden;}
+.subj-bar{height:100%;border-radius:4px;transition:width 0.4s;}
+.subj-sc{font-size:12px;font-weight:700;min-width:36px;text-align:right;}
+.subj-tgt{font-size:10px;color:#aaa;min-width:48px;text-align:right;}
 
-/* ══ 教科 ══ */
-.subj-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
-.subj-nm{font-size:12px;font-weight:700;min-width:30px;}
-.subj-bg{flex:1;background:#EDE8EA;border-radius:5px;height:10px;overflow:hidden;position:relative;}
-.subj-fill{height:100%;border-radius:5px;transition:width 0.5s ease;}
-.subj-tgt-line{position:absolute;top:0;bottom:0;width:2px;background:rgba(0,0,0,0.2);border-radius:2px;}
-.subj-sc{font-size:12px;font-weight:700;min-width:34px;text-align:right;}
-.subj-tg{font-size:10px;color:#AAA;min-width:46px;text-align:right;}
-
-/* ══ スケジュール ══ */
-.tl{position:relative;padding-left:21px;}
-.tl::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:#EDD5DE;border-radius:2px;}
-.tl-item{position:relative;margin-bottom:14px;}
-.tl-dot{position:absolute;left:-18px;top:4px;width:12px;height:12px;border-radius:50%;border:2.5px solid #fff;}
+/* ── スケジュール ── */
+.tl{position:relative;padding-left:20px;}
+.tl::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:#e8d5de;border-radius:2px;}
+.tl-item{position:relative;margin-bottom:13px;}
+.tl-dot{position:absolute;left:-17px;top:3px;width:11px;height:11px;border-radius:50%;border:2px solid #fff;}
 .tl-exam{background:#D4537E;box-shadow:0 0 0 2px #F4C0D1;}
 .tl-mock{background:#5DCAA5;box-shadow:0 0 0 2px #9FE1CB;}
-.tl-box{background:#F9F5F7;border-radius:12px;padding:10px 12px;border:1px solid #EDD5DE;}
-.tl-date{font-size:10px;color:#AAA;margin-bottom:3px;font-weight:500;}
-.tl-name-row{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
-.tl-name{font-size:13px;font-weight:700;color:#2C2C2A;flex:1;}
-.tl-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:7px;font-weight:700;margin-top:5px;}
+.tl-box{background:#F9F5F7;border-radius:11px;padding:9px 11px;border:0.5px solid #e8d5de;}
+.tl-date{font-size:10px;color:#aaa;margin-bottom:2px;font-weight:500;}
+.tl-name{font-size:12px;font-weight:700;color:#2C2C2A;display:flex;justify-content:space-between;align-items:center;}
+.tl-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:7px;font-weight:700;margin-top:4px;}
 .be{background:#FBEAF0;color:#993556;}
 .bm{background:#E1F5EE;color:#085041;}
-.tl-dl{font-size:10px;color:#854F0B;background:#FAEEDA;padding:1px 7px;border-radius:7px;margin-left:4px;font-weight:700;}
-.tl-end{font-size:10px;color:#AAA;background:#F1EFE8;padding:1px 7px;border-radius:7px;margin-left:4px;}
-.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px;}
-.goal-cell{background:#fff;border-radius:8px;padding:5px 8px;border:1px solid #EDD5DE;}
-.goal-subj{font-size:9px;font-weight:700;}
-.goal-val{font-size:13px;font-weight:800;margin-top:1px;}
-.tl-result{font-size:11px;color:#D4537E;margin-top:5px;font-weight:700;}
-.res-row{display:flex;gap:6px;margin-top:8px;align-items:center;}
+.tl-days{font-size:10px;color:#854F0B;background:#FAEEDA;padding:1px 6px;border-radius:7px;display:inline-block;margin-left:3px;font-weight:600;}
+.tl-done{font-size:10px;color:#aaa;background:#F1EFE8;padding:1px 6px;border-radius:7px;display:inline-block;margin-left:3px;}
+.tl-goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:5px;}
+.tl-goal-item{background:#fff;border-radius:7px;padding:4px 7px;border:0.5px solid #e8d5de;}
+.tl-goal-subj{font-size:9px;color:#aaa;font-weight:600;}
+.tl-goal-val{font-size:12px;font-weight:700;margin-top:1px;}
+.tl-result{font-size:11px;color:#D4537E;margin-top:4px;font-weight:700;}
+.res-row{display:flex;gap:5px;margin-top:7px;align-items:center;}
 
-/* ══ 計画 ══ */
-.pl-item{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #F0EAE8;}
-.pl-chk{width:22px;height:22px;border-radius:50%;border:2px solid #D3C0C8;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+/* ── 計画 ── */
+.pl-item{display:flex;align-items:center;gap:7px;padding:8px 0;border-bottom:0.5px solid #EDE8EA;}
+.pl-chk{width:21px;height:21px;border-radius:50%;border:2px solid #D3C0C8;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
 .pl-chk.on{background:#5DCAA5;border-color:#5DCAA5;}
-.pl-chk.on::after{content:'';display:block;width:5px;height:9px;border:2.5px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translate(-1px,-1px);}
-.pl-txt{font-size:13px;flex:1;color:#2C2C2A;line-height:1.4;}
-.pl-txt.done{text-decoration:line-through;color:#BBB;}
-.pl-tag{font-size:10px;padding:2px 8px;border-radius:7px;font-weight:700;flex-shrink:0;}
-.add-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
-.add-row input{min-width:0;flex:1;}
+.pl-chk.on::after{content:'';display:block;width:4px;height:8px;border:2.5px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translate(-1px,-1px);}
+.pl-txt{font-size:12px;flex:1;color:#2C2C2A;line-height:1.4;}
+.pl-txt.done{text-decoration:line-through;color:#aaa;}
+.pl-tag{font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700;flex-shrink:0;}
+.add-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
+.add-row .inp{min-width:0;flex:1;}
 
-/* ══ 日記 ══ */
-.mood-sel{display:flex;gap:10px;margin:7px 0 10px;}
-.mb{font-size:23px;cursor:pointer;padding:5px;border-radius:9px;border:2px solid transparent;line-height:1;}
+/* ── 日記 ── */
+.mood-row{display:flex;gap:8px;margin:7px 0 9px;}
+.mb{font-size:22px;cursor:pointer;padding:4px;border-radius:9px;border:2px solid transparent;line-height:1;-webkit-tap-highlight-color:transparent;}
 .mb.on{border-color:#D4537E;background:#FBEAF0;}
-.mb:active{transform:scale(0.88);}
-
-.d-card{background:#fff;border:1px solid #EDD5DE;border-radius:14px;margin-bottom:13px;overflow:hidden;}
-.d-main{padding:13px 13px 11px;}
-.d-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.d-ico{font-size:28px;line-height:1;flex-shrink:0;}
-.d-meta{display:flex;flex-direction:column;gap:3px;}
-.d-date{font-size:10px;color:#AAA;font-weight:500;}
-.d-pill{font-size:10px;font-weight:700;padding:2px 10px;border-radius:9px;display:inline-block;}
+.mb:active{transform:scale(0.9);}
+.d-card{background:#fff;border:0.5px solid #e8d5de;border-radius:13px;margin-bottom:13px;overflow:hidden;}
+.d-main{padding:13px 13px 10px;}
+.d-top{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.d-ico{font-size:26px;line-height:1;flex-shrink:0;}
+.d-meta{display:flex;flex-direction:column;gap:2px;}
+.d-date{font-size:10px;color:#aaa;font-weight:500;}
+.d-pill{font-size:10px;font-weight:700;padding:2px 9px;border-radius:9px;display:inline-block;}
 .d-body{font-size:13px;line-height:1.75;color:#2C2C2A;}
-
-/* 日記AIコメント */
-.d-ai{margin-top:10px;background:#EEEDFE;border-radius:10px;padding:10px 12px;border:1px solid #C5C0F0;}
+.d-ai{margin-top:9px;background:#EEEDFE;border-radius:9px;padding:9px 11px;border:0.5px solid #AFA9EC;}
 .d-ai-lbl{font-size:10px;font-weight:700;color:#534AB7;margin-bottom:3px;}
 .d-ai-txt{font-size:12px;color:#2C2C2A;line-height:1.65;}
-
-.d-toggle{width:100%;border:none;background:#F9F5F7;border-top:1px solid #EDD5DE;padding:10px 13px;font-size:11px;font-weight:700;color:#993556;cursor:pointer;text-align:left;font-family:inherit;display:flex;align-items:center;justify-content:space-between;}
+.d-toggle{width:100%;border:none;background:#F9F5F7;border-top:0.5px solid #e8d5de;padding:9px 13px;font-size:11px;font-weight:700;color:#993556;cursor:pointer;text-align:left;font-family:inherit;display:flex;align-items:center;justify-content:space-between;-webkit-tap-highlight-color:transparent;}
 .d-toggle:active{background:#F4C0D1;}
-.d-cmt-cnt{font-size:10px;background:#FBEAF0;color:#D4537E;border:1px solid #F4C0D1;padding:2px 9px;border-radius:9px;font-weight:700;}
-.d-panel{border-top:1px solid #EDD5DE;background:#FDFAFC;}
+.d-cnt{font-size:10px;background:#FBEAF0;color:#D4537E;border:1px solid #F4C0D1;padding:2px 8px;border-radius:9px;font-weight:700;}
+.d-panel{border-top:0.5px solid #e8d5de;background:#FDFAFC;}
 .cmt-list{padding:11px 13px 4px;}
-.no-cmt{font-size:12px;color:#AAA;text-align:center;padding:8px 0 4px;}
-.cmt-item{display:flex;gap:8px;margin-bottom:10px;}
-.cmt-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
-.cmt-bbl{border-radius:0 12px 12px 12px;padding:8px 12px;flex:1;}
+.no-cmt{font-size:12px;color:#aaa;text-align:center;padding:7px 0 3px;}
+.cmt-item{display:flex;gap:7px;margin-bottom:9px;}
+.cmt-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.cmt-bbl{border-radius:0 11px 11px 11px;padding:7px 11px;flex:1;}
 .cmt-who{font-size:10px;font-weight:700;margin-bottom:2px;}
-.cmt-txt{font-size:12px;line-height:1.65;color:#2C2C2A;}
-.cmt-inp-area{background:#FBEAF0;border-top:1px solid #F4C0D1;padding:12px 13px;}
+.cmt-txt{font-size:12px;line-height:1.6;color:#2C2C2A;}
+.cmt-inp{background:#FBEAF0;border-top:0.5px solid #F4C0D1;padding:11px 13px;}
 .cmt-inp-ttl{font-size:11px;font-weight:700;color:#993556;margin-bottom:7px;}
-.who-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
-.wb{padding:6px 12px;border-radius:15px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent;}
+.who-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px;}
+.wb{padding:5px 11px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent;-webkit-tap-highlight-color:transparent;}
 .wb:active{transform:scale(0.93);}
 .wm{background:#FBEAF0;color:#993556;border-color:#F4C0D1;}
 .wo{background:#EAF3DE;color:#27500A;border-color:#C0DD97;}
 .wb2{background:#FAEEDA;color:#854F0B;border-color:#FAC775;}
 .wj{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC;}
 .wb.on{outline:2.5px solid currentColor;outline-offset:2px;}
-.cmt-ta{border:1px solid #F4C0D1;border-radius:9px;padding:9px 11px;width:100%;font-size:12px;min-height:54px;resize:vertical;background:#fff;color:#2C2C2A;font-family:inherit;line-height:1.6;margin-bottom:8px;}
+.cmt-ta{border:1px solid #F4C0D1;border-radius:9px;padding:8px 10px;width:100%;font-size:12px;min-height:52px;resize:vertical;background:#fff;color:#2C2C2A;font-family:inherit;line-height:1.6;margin-bottom:7px;}
 .cmt-ta:focus{outline:none;border-color:#D4537E;}
 
-/* ══ 学びタブ ══ */
-.learn-banner{background:#EEEDFE;border-radius:14px;padding:16px 14px;margin-bottom:12px;border:1px solid #C5C0F0;}
-.learn-tag{font-size:10px;font-weight:700;color:#3C3489;background:#CECBF6;padding:2px 10px;border-radius:9px;display:inline-block;margin-bottom:9px;}
-.learn-msg{font-size:14px;font-weight:700;color:#26215C;line-height:1.7;margin-bottom:10px;}
-.learn-act-box{background:#fff;border-radius:9px;padding:10px 12px;border:1px solid #C5C0F0;}
-.learn-act-lbl{font-size:10px;font-weight:700;color:#7F77DD;margin-bottom:3px;}
+/* ── 学び ── */
+.learn-banner{background:#EEEDFE;border-radius:13px;padding:14px;margin-bottom:11px;border:1px solid #AFA9EC;}
+.learn-tag{font-size:10px;font-weight:700;color:#3C3489;background:#CECBF6;padding:2px 9px;border-radius:9px;display:inline-block;margin-bottom:8px;}
+.learn-msg{font-size:14px;font-weight:700;color:#26215C;line-height:1.65;margin-bottom:9px;}
+.learn-act{background:#fff;border-radius:9px;padding:9px 11px;border:0.5px solid #AFA9EC;}
+.learn-act-lbl{font-size:10px;font-weight:700;color:#7F77DD;margin-bottom:2px;}
 .learn-act-txt{font-size:12px;color:#2C2C2A;line-height:1.6;}
-.no-api-box{background:#F9F5F7;border-radius:12px;padding:14px;border:1px solid #EDD5DE;margin-bottom:12px;font-size:13px;color:#555;line-height:1.7;}
-.no-api-box strong{color:#2C2C2A;font-size:14px;display:block;margin-bottom:4px;}
+.no-api{background:#F9F5F7;border-radius:12px;padding:13px;border:1px solid #e8d5de;margin-bottom:11px;font-size:13px;color:#555;line-height:1.7;}
 
-/* ══ 設定 ══ */
-.api-key-row{display:flex;gap:6px;}
-.api-key-inp{flex:1;font-family:monospace;font-size:12px;}
+/* ── 設定 ── */
+.api-row{display:flex;gap:6px;}
+.api-inp{flex:1;font-family:monospace;font-size:12px;}
 .api-st{font-size:11px;margin-top:5px;font-weight:700;}
 .api-st.ok{color:#1D9E75;}
 .api-st.err{color:#A32D2D;}
-.api-tip{font-size:11px;color:#AAA;margin-top:7px;line-height:1.6;}
-.api-tip a{color:#7F77DD;}
+.api-tip{font-size:11px;color:#aaa;margin-top:6px;line-height:1.6;}
+
+/* ── 同期ステータス ── */
+.sync-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;}
+.sync-ok{background:#5DCAA5;}
+.sync-ing{background:#FAC775;animation:pulse 1s infinite;}
+.sync-err{background:#E24B4A;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.sync-bar{font-size:10px;color:#aaa;text-align:center;padding:4px;display:flex;align-items:center;justify-content:center;gap:4px;}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ヘッダー -->
 <div class="header">
-  <div class="school-pill" id="school-pill">&#127891; 志望校を設定しよう</div>
-  <div class="app-title">&#127381; 受験がんばり手帳</div>
-  <div class="exam-sub" id="exam-sub">設定タブから受験日を入力してね</div>
+  <div class="school-pill" id="school-pill">🎓 志望校を設定しよう</div>
+  <div class="header-title">🎉 受験がんばり手帳</div>
+  <div class="header-sub" id="exam-sub">設定タブから受験日を入力してね</div>
   <div class="cd-row">
     <div class="cd-box"><div class="cd-num" id="cd-d">-</div><div class="cd-lbl">日</div></div>
     <div class="cd-box"><div class="cd-num" id="cd-h">-</div><div class="cd-lbl">時間</div></div>
     <div class="cd-box"><div class="cd-num" id="cd-m">-</div><div class="cd-lbl">分</div></div>
   </div>
+  <div class="sync-bar"><span class="sync-dot sync-ok" id="sync-dot"></span><span id="sync-txt">みんなのデータにつながっています</span></div>
 </div>
 
 <!-- ホーム -->
-<div id="s-home" class="sec on">
-  <div class="ai-banner ipad-full" id="ai-banner">
-    <div class="ai-tag">&#129302; 今日のClaudeからのメッセージ</div>
-    <div id="ai-banner-body"><div class="spin-row"><div class="spinner"></div>Claudeがメッセージを生成中…</div></div>
+<div id="s-home" class="section on">
+  <div class="ai-banner" id="ai-banner">
+    <div class="ai-tag">🤖 今日のClaudeからのメッセージ</div>
+    <div id="ai-body"><div class="spin-row"><div class="spinner"></div>Claudeがメッセージを生成中…</div></div>
   </div>
-  <div id="next-evt-wrap" class="ipad-full"></div>
+  <div id="next-evt"></div>
   <div class="ipad-grid">
     <div class="card ipad-full">
-      <div class="card-ttl"><span>&#127919;</span> 合格への道のり</div>
+      <div class="card-ttl">🎯 合格への道のり</div>
       <div class="prog-bg"><div class="prog-bar" id="prog" style="width:0%"></div></div>
-      <div class="prog-lbl"><span>スタート</span><span id="prog-pct">0% 完了</span><span>&#127891;</span></div>
+      <div class="prog-lbl"><span>スタート</span><span id="prog-pct">0% 完了</span><span>🎓</span></div>
     </div>
     <div class="card">
-      <div class="card-ttl"><span>&#128197;</span> 今週の学習カレンダー</div>
+      <div class="card-ttl">📅 今週の学習カレンダー</div>
       <div class="wk-head"><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span><span>日</span></div>
       <div class="wk-grid" id="wk-grid"></div>
       <div class="time-row">
         <span class="time-lbl">今日の勉強時間：</span>
-        <input type="number" id="t-inp" min="0" max="600" placeholder="分" style="width:64px;padding:7px 9px;font-size:13px;" />
-        <span style="font-size:12px;color:#AAA;">分</span>
+        <input type="number" id="t-inp" min="0" max="600" placeholder="分" style="width:64px;padding:7px 8px;font-size:13px;" />
+        <span style="font-size:12px;color:#aaa;">分</span>
         <button class="btn-sm" onclick="saveTodayTime()">記録</button>
       </div>
-      <div class="week-sum" id="wk-sum">今週の合計：<b>0分</b>（0時間0分）</div>
+      <div style="margin-top:6px;font-size:11px;color:#aaa;">今週の合計：<b id="wk-sum" style="color:#D4537E;">0分</b></div>
     </div>
     <div class="card">
-      <div class="card-ttl"><span>&#128218;</span> 教科別 達成度</div>
+      <div class="card-ttl">📚 教科別 達成度</div>
       <div id="subj-list"></div>
     </div>
   </div>
 </div>
 
 <!-- スケジュール -->
-<div id="s-sch" class="sec">
-  <div class="sec-ttl">&#128197; 模試・受験スケジュール</div>
-  <div class="ipad-grid">
-    <div class="card ipad-full">
-      <div style="display:flex;gap:14px;margin-bottom:11px;font-size:10px;font-weight:700;">
-        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#D4537E;display:inline-block;"></span>受験本番</span>
-        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#5DCAA5;display:inline-block;"></span>模試・テスト</span>
-      </div>
-      <div class="tl" id="tl-list"></div>
+<div id="s-sch" class="section">
+  <div class="sec-ttl">📅 模試・受験スケジュール</div>
+  <div class="card">
+    <div style="display:flex;gap:12px;margin-bottom:10px;font-size:10px;font-weight:700;">
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#D4537E;display:inline-block;"></span>受験本番</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#5DCAA5;display:inline-block;"></span>模試・テスト</span>
     </div>
-    <div class="card ipad-full">
-      <div class="card-ttl"><span>&#10133;</span> 模試・テストを追加</div>
-      <div class="frow"><div class="flbl">名前</div><input type="text" id="mk-name" placeholder="〇〇模試など" /></div>
-      <div class="frow"><div class="flbl">日付</div><input type="date" id="mk-date" /></div>
-      <div class="frow"><div class="flbl">種類</div><select id="mk-type" style="width:auto;"><option value="mock">模試・テスト</option><option value="exam">受験本番</option></select></div>
-      <div style="font-size:11px;font-weight:700;color:#AAA;margin-bottom:7px;">&#127919; 教科別 目標点数</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-        <div><div style="font-size:11px;color:#D4537E;font-weight:700;margin-bottom:3px;">国語</div><input type="number" id="mk-gk" min="0" max="200" placeholder="目標点" /></div>
-        <div><div style="font-size:11px;color:#5DCAA5;font-weight:700;margin-bottom:3px;">算数</div><input type="number" id="mk-gs" min="0" max="200" placeholder="目標点" /></div>
-      </div>
-      <div class="btn-row"><button class="btn btn-pink" onclick="addMock()">&#10133; 追加する</button></div>
+    <div class="tl" id="tl-list"></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">➕ 模試・テストを追加</div>
+    <div class="frow"><div class="flbl">名前</div><input type="text" id="mk-name" placeholder="〇〇模試など" /></div>
+    <div class="frow"><div class="flbl">日付</div><input type="date" id="mk-date" /></div>
+    <div class="frow"><div class="flbl">種類</div><select id="mk-type" style="width:auto;"><option value="mock">模試・テスト</option><option value="exam">受験本番</option></select></div>
+    <div style="font-size:11px;font-weight:700;color:#aaa;margin-bottom:6px;">🎯 教科別 目標点数</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px;">
+      <div><div style="font-size:11px;color:#D4537E;font-weight:700;margin-bottom:3px;">国語</div><input type="number" id="mk-gk" min="0" max="200" placeholder="目標点" /></div>
+      <div><div style="font-size:11px;color:#5DCAA5;font-weight:700;margin-bottom:3px;">算数</div><input type="number" id="mk-gs" min="0" max="200" placeholder="目標点" /></div>
     </div>
+    <div class="btn-row"><button class="btn btn-pink" onclick="addMock()">➕ 追加する</button></div>
   </div>
 </div>
 
 <!-- 計画 -->
-<div id="s-plan" class="sec">
-  <div class="sec-ttl">&#128196; やることリスト</div>
+<div id="s-plan" class="section">
+  <div class="sec-ttl">📝 やることリスト</div>
   <div class="card">
     <div id="pl-list"></div>
     <div class="add-row">
@@ -335,673 +280,529 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 </div>
 
 <!-- 日記 -->
-<div id="s-diary" class="sec">
-  <div class="sec-ttl">&#128221; 日記を書こう</div>
+<div id="s-diary" class="section">
+  <div class="sec-ttl">📓 日記を書こう</div>
   <div class="card">
-    <div class="card-ttl"><span>&#9997;&#65039;</span> 今日の日記</div>
-    <div style="font-size:11px;color:#AAA;font-weight:600;margin-bottom:2px;">今日の気持ちは？</div>
-    <div class="mood-sel" id="mood-sel">
-      <span class="mb on" onclick="selMood(this,'happy')" title="さいこう！">&#128522;</span>
-      <span class="mb" onclick="selMood(this,'ok')" title="まあまあ">&#128512;</span>
-      <span class="mb" onclick="selMood(this,'tired')" title="つかれた">&#128555;</span>
-      <span class="mb" onclick="selMood(this,'sad')" title="くじけそう">&#128546;</span>
-      <span class="mb" onclick="selMood(this,'fire')" title="やるぞ！">&#128293;</span>
+    <div class="card-ttl">✏️ 今日の日記</div>
+    <div style="font-size:11px;color:#aaa;font-weight:600;margin-bottom:1px;">今日の気持ちは？</div>
+    <div class="mood-row" id="mood-row">
+      <span class="mb on" onclick="selMood(this,'happy')">😊</span>
+      <span class="mb" onclick="selMood(this,'ok')">😄</span>
+      <span class="mb" onclick="selMood(this,'tired')">😓</span>
+      <span class="mb" onclick="selMood(this,'sad')">😢</span>
+      <span class="mb" onclick="selMood(this,'fire')">🔥</span>
     </div>
-    <textarea id="d-inp" placeholder="今日どんな勉強をした？難しかったこと、できたこと、なんでも書いてみよう！"></textarea>
-    <div class="btn-row"><button class="btn btn-pink" onclick="addDiary()">書く &#10003;</button></div>
+    <textarea class="txa" id="d-inp" placeholder="今日どんな勉強をした？難しかったこと、できたこと、なんでも書いてみよう！"></textarea>
+    <div class="btn-row"><button class="btn btn-pink" onclick="addDiary()">書く ✓</button></div>
   </div>
   <div id="d-list"></div>
 </div>
 
 <!-- 学び -->
-<div id="s-learn" class="sec">
-  <div class="sec-ttl">&#127775; 今日の学び</div>
+<div id="s-learn" class="section">
+  <div class="sec-ttl">🌟 今日の学び</div>
   <div id="learn-wrap">
-    <div class="no-api-box" id="learn-noapi">
-      <strong>&#128274; APIキーを設定してください</strong>
-      設定タブでAnthropicのAPIキーを入力すると、日記の内容や気持ちに合わせてClaudeがオリジナルの学びメッセージを毎日生成します！
-    </div>
+    <div class="no-api">🔒 設定タブでAPIキーを入力すると、Claudeがオリジナルの学びメッセージを毎日届けます！</div>
   </div>
   <div class="card">
-    <div class="card-ttl"><span>&#128161;</span> こんな内容が届きます</div>
-    <div style="font-size:12px;color:#555;line-height:1.9;">
-      &#128522; <b style="color:#2C2C2A;">嬉しい日</b>　→　成功をさらに伸ばす逆算の考え方<br>
-      &#128555; <b style="color:#2C2C2A;">疲れた日</b>　→　休息も勉強のうち、継続のコツ<br>
-      &#128546; <b style="color:#2C2C2A;">くじけた日</b>　→　失敗から立ち上がる心の持ち方<br>
-      &#128293; <b style="color:#2C2C2A;">やる気の日</b>　→　そのエネルギーを最大化する方法
+    <div class="card-ttl">💡 こんな内容が届きます</div>
+    <div style="font-size:12px;color:#aaa;line-height:1.8;">
+      😊 <b style="color:#2C2C2A;">嬉しい日</b> → 成功をさらに伸ばす逆算の考え方<br>
+      😓 <b style="color:#2C2C2A;">疲れた日</b> → 休息も勉強のうち、継続のコツ<br>
+      😢 <b style="color:#2C2C2A;">くじけた日</b> → 失敗から立ち上がる心の持ち方<br>
+      🔥 <b style="color:#2C2C2A;">やる気の日</b> → そのエネルギーを最大化する方法
     </div>
   </div>
 </div>
 
 <!-- 設定 -->
-<div id="s-cfg" class="sec">
-  <div class="sec-ttl">&#9881;&#65039; 設定</div>
+<div id="s-cfg" class="section">
+  <div class="sec-ttl">⚙️ 設定</div>
   <div class="card">
-    <div class="card-ttl"><span>&#129302;</span> Claude APIキー</div>
-    <div class="api-key-row">
-      <input type="password" class="api-key-inp" id="api-inp" placeholder="sk-ant-api03-…" />
-      <button class="btn btn-purple" onclick="saveApiKey()" style="padding:9px 14px;font-size:12px;">保存</button>
+    <div class="card-ttl">🤖 Claude APIキー</div>
+    <div class="api-row">
+      <input class="inp api-inp" id="api-inp" type="password" placeholder="sk-ant-api03-…" />
+      <button class="btn btn-purple" onclick="saveApiKey()" style="padding:8px 14px;font-size:12px;">保存</button>
     </div>
     <div class="api-st" id="api-st"></div>
-    <div class="api-tip">
-      APIキーは <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> で取得できます。<br>
-      キーはこの端末にのみ保存され、外部サーバーへは送信されません。
-    </div>
+    <div class="api-tip">console.anthropic.com でAPIキーを取得できます。キーはこの端末のみに保存されます。</div>
   </div>
   <div class="card">
-    <div class="card-ttl"><span>&#127891;</span> 志望校・受験日</div>
-    <div class="frow"><div class="flbl">志望校名</div><input type="text" id="cfg-school" placeholder="〇〇中学校" /></div>
-    <div class="frow"><div class="flbl">受験日</div><input type="date" id="cfg-exam" /></div>
-    <div class="btn-row"><button class="btn btn-pink" onclick="saveCfg()">保存する</button></div>
-    <div class="saved" id="cfg-saved">&#10003; 保存しました！</div>
+    <div class="card-ttl">🎓 志望校・受験日</div>
+    <div class="frow"><div class="flbl">志望校名</div><input type="text" id="school-inp" placeholder="〇〇中学校" /></div>
+    <div class="frow"><div class="flbl">受験日</div><input type="date" id="exam-inp" /></div>
+    <div class="btn-row"><button class="btn btn-pink" onclick="saveSettings()">保存する</button></div>
+    <div class="saved" id="cfg-saved">✓ 保存しました！</div>
   </div>
   <div class="card">
-    <div class="card-ttl"><span>&#128218;</span> 教科別の点数・目標を更新</div>
-    <div id="score-form"></div>
+    <div class="card-ttl">📚 教科別の点数を更新</div>
+    <div id="score-inps"></div>
     <div class="btn-row"><button class="btn btn-pink" onclick="saveScores()">保存する</button></div>
-    <div class="saved" id="sc-saved">&#10003; 保存しました！</div>
+    <div class="saved" id="score-saved">✓ 保存しました！</div>
   </div>
 </div>
 
-<!-- ボトムナビ -->
 <nav>
-  <button class="nb on" onclick="switchTab('home',this)"><span class="nb-ico">&#127968;</span><span class="nb-lbl">ホーム</span></button>
-  <button class="nb" onclick="switchTab('sch',this)"><span class="nb-ico">&#128197;</span><span class="nb-lbl">スケジュール</span></button>
-  <button class="nb" onclick="switchTab('plan',this)"><span class="nb-ico">&#128196;</span><span class="nb-lbl">計画</span></button>
-  <button class="nb" onclick="switchTab('diary',this)"><span class="nb-ico">&#128221;</span><span class="nb-lbl">日記</span></button>
-  <button class="nb" onclick="switchTab('learn',this)"><span class="nb-ico">&#127775;</span><span class="nb-lbl">学び</span></button>
-  <button class="nb" onclick="switchTab('cfg',this)"><span class="nb-ico">&#9881;&#65039;</span><span class="nb-lbl">設定</span></button>
+  <button class="nb on" onclick="sw('home',this)"><span class="nb-ico">🏠</span><span class="nb-lbl">ホーム</span></button>
+  <button class="nb" onclick="sw('sch',this)"><span class="nb-ico">📅</span><span class="nb-lbl">スケジュール</span></button>
+  <button class="nb" onclick="sw('plan',this)"><span class="nb-ico">📝</span><span class="nb-lbl">計画</span></button>
+  <button class="nb" onclick="sw('diary',this)"><span class="nb-ico">📓</span><span class="nb-lbl">日記</span></button>
+  <button class="nb" onclick="sw('learn',this)"><span class="nb-ico">🌟</span><span class="nb-lbl">学び</span></button>
+  <button class="nb" onclick="sw('cfg',this)"><span class="nb-ico">⚙️</span><span class="nb-lbl">設定</span></button>
 </nav>
-</div><!-- .app -->
+</div>
 
-<script>
-/* ════════════════════════════════
-   定数・設定
-════════════════════════════════ */
-const STORE = 'juken_v6';
-const APIKEY_STORE = 'juken_apikey';
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, addDoc, updateDoc, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const WHO = {
-  mama: {label:'ママ',      bg:'#FBEAF0',bd:'#F4C0D1',tx:'#993556',ico:'&#128105;'},
-  ojii: {label:'おじいちゃん',bg:'#EAF3DE',bd:'#C0DD97',tx:'#27500A',ico:'&#128116;'},
-  obaa: {label:'おばあちゃん',bg:'#FAEEDA',bd:'#FAC775',tx:'#854F0B',ico:'&#128117;'},
-  jibun:{label:'自分',      bg:'#EEEDFE',bd:'#AFA9EC',tx:'#3C3489',ico:'&#9733;'}
-};
-const MOOD_ICO = {happy:'&#128522;',ok:'&#128512;',tired:'&#128555;',sad:'&#128546;',fire:'&#128293;'};
-const MOOD_JP  = {happy:'さいこう！',ok:'まあまあ',tired:'つかれた',sad:'くじけそう...',fire:'やるぞ！'};
-const MOOD_META= {
-  happy:{pill:'さいこう！',bg:'#E1F5EE',co:'#085041'},
-  ok:   {pill:'まあまあ',  bg:'#EEEDFE',co:'#3C3489'},
-  tired:{pill:'つかれた',  bg:'#FAEEDA',co:'#854F0B'},
-  sad:  {pill:'くじけそう',bg:'#FCEBEB',co:'#A32D2D'},
-  fire: {pill:'やるぞ！',  bg:'#FBEAF0',co:'#993556'}
-};
-const SUBJ_CO = {'国語':'#D4537E','算数':'#5DCAA5','その他':'#888780'};
-const SUBJ_BG = {'国語':'#FBEAF0','算数':'#E1F5EE','その他':'#F1EFE8'};
-
-/* ════════════════════════════════
-   ストレージ
-════════════════════════════════ */
-const load = () => { try{const s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}return null; };
-const save = () => { try{localStorage.setItem(STORE,JSON.stringify(S));}catch(e){} };
-const getKey = () => localStorage.getItem(APIKEY_STORE)||'';
-const setKey = k => localStorage.setItem(APIKEY_STORE,k);
-
-/* ════════════════════════════════
-   初期データ
-════════════════════════════════ */
-const DEFAULTS = {
-  school:'', examDate:'',
-  subjects:[
-    {name:'国語',color:'#D4537E',bg:'#FBEAF0',score:72,target:80},
-    {name:'算数',color:'#5DCAA5',bg:'#E1F5EE',score:65,target:80}
-  ],
-  mocks:[
-    {id:1,name:'第1回 合不合判定テスト',date:'2025-09-14',type:'mock',gk:70,gs:70,result:''},
-    {id:2,name:'第2回 合不合判定テスト',date:'2025-10-12',type:'mock',gk:75,gs:75,result:''},
-    {id:3,name:'第3回 合不合判定テスト',date:'2025-11-09',type:'mock',gk:80,gs:80,result:''},
-    {id:4,name:'受験本番',              date:'2026-01-10',type:'exam',gk:85,gs:85,result:''}
-  ],
-  plans:[
-    {id:1,text:'算数：分数の練習問題10問',subj:'算数',done:true},
-    {id:2,text:'国語：漢字の復習 50字',  subj:'国語',done:true},
-    {id:3,text:'過去問：昨年の算数を解く',subj:'算数',done:false}
-  ],
-  diaries:[
-    {id:1,date:'4月8日（月）',mood:'fire',
-     text:'算数の分数がやっとわかった！先生に聞いたらコツを教えてもらえた。',
-     comments:[{who:'mama',text:'すごい！ちゃんと先生に聞けたんだね。えらいよ！'},{who:'ojii',text:'じいじも嬉しいぞ！その調子！'}],
-     aiMsg:''},
-    {id:2,date:'4月7日（日）',mood:'tired',
-     text:'今日は疲れたけど、国語の読解を1問だけ解けた。',
-     comments:[{who:'obaa',text:'疲れた日に1問でも解けたのはすごいことだよ！ゆっくり休んでね。'}],
-     aiMsg:''}
-  ],
-  weekDone:[true,true,true,false,false,false,false],
-  weekTime:[60,45,90,0,0,0,0],
-  mood:'happy',
-  openDiary:null,
-  dWho:{},
-  todayMsg:{date:'',text:'',action:''},
-  nid:20
+/* ════ Firebase設定 ════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBKpPX-8XlNCk86-bSfWFy0YeNGBaq9-6Q",
+  authDomain: "study-app-b84f5.firebaseapp.com",
+  projectId: "study-app-b84f5",
+  storageBucket: "study-app-b84f5.firebasestorage.app",
+  messagingSenderId: "88548984008",
+  appId: "1:88548984008:web:132d7aeb5a1eba7b0311fd",
+  measurementId: "G-HMJKRPXGHP"
 };
 
-let S = load() || JSON.parse(JSON.stringify(DEFAULTS));
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-/* ════════════════════════════════
-   タブ切り替え
-════════════════════════════════ */
-function switchTab(name, el){
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById('s-'+name).classList.add('on');
-  if(el) el.classList.add('on');
+/* ════ 定数 ════ */
+const FAMILY_ID = 'family_main';
+const WHO_CFG = {
+  mama: {label:'ママ',bg:'#FBEAF0',border:'#F4C0D1',txt:'#993556',ico:'👩'},
+  ojii: {label:'おじいちゃん',bg:'#EAF3DE',border:'#C0DD97',txt:'#27500A',ico:'👴'},
+  obaa: {label:'おばあちゃん',bg:'#FAEEDA',border:'#FAC775',txt:'#854F0B',ico:'👵'},
+  jibun:{label:'自分',bg:'#EEEDFE',border:'#AFA9EC',txt:'#3C3489',ico:'⭐'}
+};
+const MOOD_ICO  = {happy:'😊',ok:'😄',tired:'😓',sad:'😢',fire:'🔥'};
+const MOOD_JP   = {happy:'さいこう！',ok:'まあまあ',tired:'つかれた',sad:'くじけそう',fire:'やるぞ！'};
+const MOOD_META = {
+  happy:{txt:'さいこう！',bg:'#E1F5EE',color:'#085041'},
+  ok:   {txt:'まあまあ',  bg:'#EEEDFE',color:'#3C3489'},
+  tired:{txt:'つかれた',  bg:'#FAEEDA',color:'#854F0B'},
+  sad:  {txt:'くじけそう',bg:'#FCEBEB',color:'#A32D2D'},
+  fire: {txt:'やるぞ！',  bg:'#FBEAF0',color:'#993556'}
+};
+const SUBJ_COLOR = {'国語':'#D4537E','算数':'#5DCAA5','その他':'#888780'};
+const SUBJ_BG    = {'国語':'#FBEAF0','算数':'#E1F5EE','その他':'#F1EFE8'};
+const API_KEY_STORE = 'juken_api_key';
+
+/* ════ ローカルのみ保存 ════ */
+const getApiKey = () => localStorage.getItem(API_KEY_STORE) || '';
+const setApiKey = k => localStorage.setItem(API_KEY_STORE, k);
+
+/* ════ 状態（Firestoreから読む） ════ */
+let state = {
+  school: '', examDate: '',
+  subjects: [
+    {name:'国語',color:'#D4537E',bg:'#FBEAF0',score:0,target:80},
+    {name:'算数',color:'#5DCAA5',bg:'#E1F5EE',score:0,target:80}
+  ],
+  mocks: [],
+  plans: [],
+  weekDone: [false,false,false,false,false,false,false],
+  weekTime: [0,0,0,0,0,0,0],
+  todayWisdom: {date:'',text:'',action:''},
+};
+let selectedMood = 'happy';
+let openDiaryId = null;
+let diaryWhoSel = {};
+let diaries = [];
+let unsubDiaries = null;
+
+/* ════ 同期ステータス表示 ════ */
+function syncStatus(status) {
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-txt');
+  if (!dot || !txt) return;
+  dot.className = 'sync-dot';
+  if (status === 'ok')  { dot.classList.add('sync-ok');  txt.textContent = 'みんなのデータにつながっています'; }
+  if (status === 'ing') { dot.classList.add('sync-ing'); txt.textContent = '同期中…'; }
+  if (status === 'err') { dot.classList.add('sync-err'); txt.textContent = 'オフラインです（データは保存されます）'; }
+}
+
+/* ════ Firestore ヘルパー ════ */
+const settingsRef  = () => doc(db, 'families', FAMILY_ID, 'data', 'settings');
+const mocksRef     = () => doc(db, 'families', FAMILY_ID, 'data', 'mocks');
+const plansRef     = () => doc(db, 'families', FAMILY_ID, 'data', 'plans');
+const weekRef      = () => doc(db, 'families', FAMILY_ID, 'data', 'week');
+const wisdomRef    = () => doc(db, 'families', FAMILY_ID, 'data', 'wisdom');
+const diariesCol   = () => collection(db, 'families', FAMILY_ID, 'diaries');
+const diaryDoc     = id => doc(db, 'families', FAMILY_ID, 'diaries', id);
+const cmtsCol      = id => collection(db, 'families', FAMILY_ID, 'diaries', id, 'comments');
+const cmtDoc       = (did,cid) => doc(db, 'families', FAMILY_ID, 'diaries', did, 'comments', cid);
+
+async function fsSet(ref, data) {
+  syncStatus('ing');
+  try { await setDoc(ref, data, {merge:true}); syncStatus('ok'); }
+  catch(e) { syncStatus('err'); throw e; }
+}
+async function fsGet(ref) {
+  try { const s = await getDoc(ref); return s.exists() ? s.data() : null; }
+  catch(e) { syncStatus('err'); return null; }
+}
+
+/* ════ 初期データロード ════ */
+async function loadAll() {
+  syncStatus('ing');
+  try {
+    const [cfg, mks, pls, wk] = await Promise.all([
+      fsGet(settingsRef()), fsGet(mocksRef()),
+      fsGet(plansRef()),    fsGet(weekRef())
+    ]);
+    if (cfg) {
+      state.school    = cfg.school    || '';
+      state.examDate  = cfg.examDate  || '';
+      state.subjects  = cfg.subjects  || state.subjects;
+    }
+    if (mks) state.mocks    = mks.list  || [];
+    if (pls) state.plans    = pls.list  || [];
+    if (wk)  { state.weekDone = wk.done || state.weekDone; state.weekTime = wk.time || state.weekTime; }
+    syncStatus('ok');
+  } catch(e) { syncStatus('err'); }
+
   renderAll();
-  if((name==='home'||name==='learn') && getKey()) genTodayMsg();
+  listenDiaries();
+  if (getApiKey()) generateWisdom();
 }
 
-/* ════════════════════════════════
-   Claude API 呼び出し
-════════════════════════════════ */
-async function callClaude(prompt, maxTok=400){
-  const key = getKey();
-  if(!key) throw new Error('APIキー未設定');
-  const res = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':key,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
-    body: JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens: maxTok,
-      messages:[{role:'user',content:prompt}]
-    })
+/* ════ 日記リアルタイム購読 ════ */
+function listenDiaries() {
+  if (unsubDiaries) unsubDiaries();
+  const q = query(diariesCol(), orderBy('createdAt','desc'));
+  unsubDiaries = onSnapshot(q, snap => {
+    diaries = snap.docs.map(d => ({id: d.id, ...d.data(), comments:[]}));
+    // 各日記のコメントも購読
+    diaries.forEach(d => listenComments(d.id));
+    renderDiaries();
+  }, () => syncStatus('err'));
+}
+
+const cmtListeners = {};
+function listenComments(diaryId) {
+  if (cmtListeners[diaryId]) return;
+  const q = query(cmtsCol(diaryId), orderBy('createdAt','asc'));
+  cmtListeners[diaryId] = onSnapshot(q, snap => {
+    const diary = diaries.find(d => d.id === diaryId);
+    if (diary) {
+      diary.comments = snap.docs.map(d => ({id: d.id, ...d.data()}));
+      renderDiaries();
+    }
   });
-  if(!res.ok){
-    const e = await res.json().catch(()=>({}));
-    throw new Error(e.error?.message || 'APIエラー '+res.status);
-  }
-  const d = await res.json();
-  return d.content[0].text;
 }
 
-/* ════════════════════════════════
-   今日のメッセージ生成（ホーム＋学びタブ共用）
-════════════════════════════════ */
-async function genTodayMsg(){
-  const today = new Date().toISOString().split('T')[0];
-  if(S.todayMsg.date===today && S.todayMsg.text){
-    applyTodayMsg(S.todayMsg.text, S.todayMsg.action);
-    return;
-  }
+/* ════ タブ切替 ════ */
+function sw(name, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+  document.getElementById('s-' + name).classList.add('on');
+  if (el) el.classList.add('on');
+  renderAll();
+  if ((name === 'home' || name === 'learn') && getApiKey()) generateWisdom();
+}
+window.sw = sw;
 
-  // ローディング表示
-  setAiBannerLoading();
-  setLearnLoading();
-
-  const recent = [...S.diaries].reverse().slice(0,3);
-  const diaryCtx = recent.length
-    ? recent.map(d=>`・${d.date}（気持ち：${MOOD_JP[d.mood]||d.mood}）「${d.text}」`).join('\n')
-    : '（日記なし）';
-
-  const school = S.school || '志望校';
-  const remaining = S.examDate
-    ? Math.ceil((new Date(S.examDate+'T00:00:00') - new Date()) / 86400000)
-    : null;
-
-  const prompt =
-`あなたは小学6年生の受験生（${school}受験）を応援するやさしいメンターです。
-今日：${today}、受験まであと${remaining!=null?remaining+'日':'不明'}です。
-
-最近の日記：
-${diaryCtx}
-
-今日の「学びのメッセージ」をJSON形式のみで返してください（前後に説明文不要）：
-{
-  "message": "逆算力・継続力・成長マインドなどをテーマにした学びのメッセージ（小学生がわかる言葉で90〜120文字）",
-  "action": "今日すぐできる具体的なアクション（60文字以内）"
-}`;
-
-  try{
-    const raw = await callClaude(prompt, 320);
-    const json = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    S.todayMsg = {date:today, text:json.message, action:json.action};
-    save();
-    applyTodayMsg(json.message, json.action);
-  }catch(e){
-    const fb = 'コツコツ続けることが、合格への一番の近道だよ。今日も小さな一歩を積み重ねよう！';
-    const fa = '今日の勉強が終わったら、できたことを1つ日記に書いてみよう。';
-    applyTodayMsg(fb, fa);
-  }
+/* ════ カウントダウン ════ */
+function updateCD() {
+  if (!state.examDate) return;
+  const exam = new Date(state.examDate + 'T00:00:00'), now = new Date(), diff = exam - now;
+  if (diff <= 0) { ['cd-d','cd-h','cd-m'].forEach(id => document.getElementById(id).textContent = '0'); return; }
+  document.getElementById('cd-d').textContent = Math.floor(diff / 86400000);
+  document.getElementById('cd-h').textContent = Math.floor((diff % 86400000) / 3600000);
+  document.getElementById('cd-m').textContent = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('school-pill').textContent = '🎓 ' + (state.school || '志望校');
+  const d = exam;
+  document.getElementById('exam-sub').textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 受験`;
 }
 
-function setAiBannerLoading(){
-  const el=document.getElementById('ai-banner-body');
-  if(el) el.innerHTML=`<div class="spin-row"><div class="spinner"></div>Claudeがメッセージを考えています…</div>`;
-}
-function setLearnLoading(){
-  const w=document.getElementById('learn-wrap');
-  if(w) w.innerHTML=`<div class="learn-banner"><div class="spin-row"><div class="spinner"></div>Claudeがメッセージを生成中…</div></div>`;
-}
-
-function applyTodayMsg(text, action){
-  // ホームバナー
-  const b=document.getElementById('ai-banner-body');
-  if(b) b.innerHTML=`<div class="ai-msg">${text}</div>
-    <div class="ai-action-box">
-      <div class="ai-action-lbl">&#9989; 今日やってみよう！</div>
-      <div class="ai-action-txt">${action}</div>
-    </div>
-    <button class="ai-refresh" onclick="refreshMsg()">&#127754; 別のメッセージを見る</button>`;
-  // 学びタブ
-  const w=document.getElementById('learn-wrap');
-  if(w) w.innerHTML=`<div class="learn-banner">
-    <div class="learn-tag">&#129302; Claudeからの今日のメッセージ</div>
-    <div class="learn-msg">${text}</div>
-    <div class="learn-act-box">
-      <div class="learn-act-lbl">&#9989; 今日やってみよう！</div>
-      <div class="learn-act-txt">${action}</div>
-    </div>
-  </div>
-  <div style="text-align:right;margin-bottom:12px;">
-    <button class="btn btn-purple" onclick="refreshMsg()" style="font-size:12px;padding:8px 18px;">&#127754; 別のメッセージを見る</button>
-  </div>`;
-  const na=document.getElementById('learn-noapi');
-  if(na) na.style.display='none';
-}
-
-async function refreshMsg(){
-  S.todayMsg={date:'',text:'',action:''};save();
-  setAiBannerLoading();setLearnLoading();
-  await genTodayMsg();
-}
-
-/* ════════════════════════════════
-   日記のAIコメント
-════════════════════════════════ */
-async function genDiaryAI(id){
-  const diary = S.diaries.find(d=>d.id===id);
-  if(!diary) return;
-  const el = document.getElementById('dai-'+id);
-  if(el) el.innerHTML=`<div class="d-ai-lbl">&#129302; Claudeより</div><div class="spin-row"><div class="spinner"></div>考えています…</div>`;
-
-  const prompt =
-`小学6年生の受験生（${S.school||'志望校'}受験）の日記を読んでください。
-気持ち：${MOOD_JP[diary.mood]||diary.mood}
-日記：「${diary.text}」
-
-この子に向けて、温かく励ます一言コメントを60〜90文字で書いてください。
-小学生がわかる言葉で、具体的に褒めて、次への前向きな気持ちにさせてください。コメントだけ返してください。`;
-
-  try{
-    const msg = await callClaude(prompt, 180);
-    diary.aiMsg = msg.trim(); save();
-    if(el) el.innerHTML=`<div class="d-ai-lbl">&#129302; Claudeより</div><div class="d-ai-txt">${diary.aiMsg}</div>`;
-  }catch(e){
-    if(el) el.innerHTML=`<div class="d-ai-lbl">&#129302; Claudeより</div><div class="d-ai-txt">今日もよく頑張ったね！この積み重ねがかならず合格につながるよ。応援してるよ！</div>`;
-  }
-}
-
-/* ════════════════════════════════
-   カウントダウン
-════════════════════════════════ */
-function renderCountdown(){
-  if(!S.examDate) return;
-  const exam=new Date(S.examDate+'T00:00:00'), now=new Date(), diff=exam-now;
-  document.getElementById('cd-d').textContent = Math.max(0,Math.floor(diff/86400000));
-  document.getElementById('cd-h').textContent = Math.max(0,Math.floor((diff%86400000)/3600000));
-  document.getElementById('cd-m').textContent = Math.max(0,Math.floor((diff%3600000)/60000));
-  document.getElementById('school-pill').innerHTML = '&#127891; '+(S.school||'志望校');
-  const d=exam;
-  document.getElementById('exam-sub').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 受験`;
-}
-
-/* ════════════════════════════════
-   週カレンダー
-════════════════════════════════ */
-function renderWeek(){
-  const g=document.getElementById('wk-grid'); if(!g)return;
-  g.innerHTML='';
-  const lbls=['月','火','水','木','金','土','日'];
-  const MAP=[1,2,3,4,5,6,0];
-  const today=new Date().getDay();
-  S.weekDone.forEach((done,i)=>{
-    const isToday=MAP[i]===today, mins=S.weekTime[i]||0;
-    const c=document.createElement('div');
-    c.className='dc '+(isToday?'today':done?'done':'empty');
-    const ts=mins>0?(mins>=60?Math.floor(mins/60)+'h'+(mins%60?mins%60+'m':''):mins+'m'):'';
-    c.innerHTML=`<span class="dc-lbl">${lbls[i]}</span><span class="dc-time">${ts}</span>`;
-    if(!isToday) c.onclick=()=>{S.weekDone[i]=!S.weekDone[i];save();renderWeek();};
+/* ════ カレンダー ════ */
+function renderWeek() {
+  const g = document.getElementById('wk-grid'); if (!g) return;
+  g.innerHTML = '';
+  const labels = ['月','火','水','木','金','土','日'];
+  const mapIdx = [1,2,3,4,5,6,0];
+  const todayIdx = new Date().getDay();
+  state.weekDone.forEach((done, i) => {
+    const isToday = mapIdx[i] === todayIdx;
+    const mins = state.weekTime[i] || 0;
+    const c = document.createElement('div');
+    c.className = 'dc ' + (isToday ? 'today' : done ? 'done' : 'empty');
+    const ts = mins > 0 ? (mins >= 60 ? Math.floor(mins/60)+'h'+(mins%60?String(mins%60)+'m':'') : mins+'m') : '';
+    c.innerHTML = `<span class="dc-lbl">${labels[i]}</span><span class="dc-time">${ts}</span>`;
+    c.onclick = () => {
+      if (!isToday) {
+        state.weekDone[i] = !state.weekDone[i];
+        fsSet(weekRef(), {done: state.weekDone, time: state.weekTime});
+        renderWeek();
+      }
+    };
     g.appendChild(c);
   });
-  const tot=(S.weekTime||[]).reduce((a,b)=>a+b,0);
-  const el=document.getElementById('wk-sum');
-  if(el) el.innerHTML=`今週の合計：<b>${tot}分</b>（${Math.floor(tot/60)}時間${tot%60}分）`;
+  const total = (state.weekTime || []).reduce((a,b) => a+b, 0);
+  const el = document.getElementById('wk-sum');
+  if (el) el.textContent = total + '分（' + Math.floor(total/60) + '時間' + total%60 + '分）';
 }
 
-function saveTodayTime(){
-  const v=parseInt(document.getElementById('t-inp').value);
-  if(isNaN(v)||v<0) return;
-  const MAP=[1,2,3,4,5,6,0], todayIdx=new Date().getDay(), col=MAP.indexOf(todayIdx);
-  if(col>=0){
-    if(!S.weekTime) S.weekTime=[0,0,0,0,0,0,0];
-    S.weekTime[col]=v; S.weekDone[col]=v>0; save(); renderWeek();
-    document.getElementById('t-inp').value='';
+window.saveTodayTime = function() {
+  const inp = document.getElementById('t-inp'); const v = parseInt(inp.value);
+  if (isNaN(v) || v < 0) return;
+  const mapIdx = [1,2,3,4,5,6,0]; const col = mapIdx.indexOf(new Date().getDay());
+  if (col >= 0) {
+    state.weekTime[col] = v; state.weekDone[col] = v > 0;
+    fsSet(weekRef(), {done: state.weekDone, time: state.weekTime});
+    renderWeek(); inp.value = '';
+  }
+};
+
+/* ════ 教科別 ════ */
+function renderSubjects() {
+  const g = document.getElementById('subj-list'); if (!g) return;
+  g.innerHTML = '';
+  state.subjects.forEach(s => {
+    const pct = Math.min(100, Math.round(s.score / (s.target || 100) * 100));
+    g.innerHTML += `<div class="subj-row"><span class="subj-nm" style="color:${s.color};">${s.name}</span><div class="subj-bg"><div class="subj-bar" style="width:${pct}%;background:${s.color};"></div></div><span class="subj-sc" style="color:${s.color};">${s.score}点</span><span class="subj-tgt">目標${s.target||'-'}点</span></div>`;
+  });
+  const si = document.getElementById('score-inps'); if (!si) return;
+  si.innerHTML = '';
+  state.subjects.forEach((s,i) => {
+    si.innerHTML += `<div class="frow"><div class="flbl">${s.name}</div><input class="inp" id="sc-${i}" type="number" min="0" max="200" value="${s.score}" placeholder="点数" /><span style="font-size:11px;color:#aaa;flex-shrink:0;">目標</span><input class="inp" id="tg-${i}" type="number" min="0" max="200" value="${s.target||''}" placeholder="目標点" /></div>`;
+  });
+}
+
+/* ════ スケジュール ════ */
+function renderTimeline() {
+  const list = document.getElementById('tl-list'); if (!list) return;
+  const sorted = [...state.mocks].sort((a,b) => new Date(a.date) - new Date(b.date));
+  const today = new Date(); today.setHours(0,0,0,0);
+  list.innerHTML = '';
+  if (!sorted.length) { list.innerHTML = '<div style="font-size:12px;color:#aaa;padding:7px 0;">まだ追加されていません</div>'; return; }
+  sorted.forEach(m => {
+    const d = new Date(m.date + 'T00:00:00'), diff = Math.ceil((d-today)/86400000), past = diff<0, isExam = m.type==='exam';
+    const dStr = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+    const dTag = past ? `<span class="tl-done">終了</span>` : `<span class="tl-days">あと${diff}日</span>`;
+    const goalRow = (m.goalKokugo || m.goalSansu) ? `<div class="tl-goal-grid">${m.goalKokugo!=null?`<div class="tl-goal-item"><div class="tl-goal-subj" style="color:#D4537E;">国語</div><div class="tl-goal-val" style="color:#D4537E;">${m.goalKokugo}点</div></div>`:''} ${m.goalSansu!=null?`<div class="tl-goal-item"><div class="tl-goal-subj" style="color:#5DCAA5;">算数</div><div class="tl-goal-val" style="color:#5DCAA5;">${m.goalSansu}点</div></div>`:''}</div>` : '';
+    const resInp = past&&!m.result ? `<div class="res-row"><input class="inp" id="res-${m.id}" placeholder="結果を記録…" style="font-size:12px;padding:6px 9px;"/><button class="btn-sm" onclick="saveResult('${m.id}')">保存</button></div>` : '';
+    const resShow = m.result ? `<div class="tl-result">📈 結果：${m.result}</div>` : '';
+    list.innerHTML += `<div class="tl-item"><div class="tl-dot ${isExam?'tl-exam':'tl-mock'}"></div><div class="tl-box"><div class="tl-date">${dStr} ${dTag}</div><div class="tl-name">${m.name}<button class="btn-del" onclick="delMock('${m.id}')">削除</button></div><span class="tl-badge ${isExam?'be':'bm'}">${isExam?'受験本番':'模試・テスト'}</span>${goalRow}${resShow}${resInp}</div></div>`;
+  });
+  // 次のイベント
+  const wrap = document.getElementById('next-evt'); if (!wrap) return;
+  const upcoming = sorted.filter(m => new Date(m.date+'T00:00:00') >= today);
+  if (!upcoming.length) { wrap.innerHTML = ''; return; }
+  const next = upcoming[0]; const d = new Date(next.date+'T00:00:00'); const diff = Math.ceil((d-today)/86400000);
+  const goals = []; if(next.goalKokugo) goals.push(`国語${next.goalKokugo}点`); if(next.goalSansu) goals.push(`算数${next.goalSansu}点`);
+  wrap.innerHTML = `<div class="next-evt"><div class="next-lbl">📌 次のイベント</div><div style="font-size:13px;font-weight:700;color:${next.type==='exam'?'#D4537E':'#085041'};">${next.name}</div><div style="font-size:11px;color:#444;margin-top:1px;">${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（あと${diff}日）</div>${goals.length?`<div style="font-size:11px;color:#854F0B;background:#FAEEDA;padding:1px 8px;border-radius:8px;display:inline-block;margin-top:4px;font-weight:600;">🎯 目標：${goals.join('・')}</div>`:''}</div>`;
+}
+
+/* ════ 計画 ════ */
+function renderPlan() {
+  const list = document.getElementById('pl-list'); if (!list) return;
+  list.innerHTML = '';
+  if (!state.plans.length) { list.innerHTML = '<div style="font-size:12px;color:#aaa;padding:7px 0;">やることを追加しよう！</div>'; return; }
+  state.plans.forEach((p,i) => {
+    const c = SUBJ_COLOR[p.subject]||'#888780', bg = SUBJ_BG[p.subject]||'#F1EFE8';
+    list.innerHTML += `<div class="pl-item"><div class="pl-chk ${p.done?'on':''}" onclick="togglePlan(${i})"></div><span class="pl-txt ${p.done?'done':''}">${p.text}</span><span class="pl-tag" style="background:${bg};color:${c};">${p.subject}</span></div>`;
+  });
+  const done = state.plans.filter(p=>p.done).length, pct = state.plans.length ? Math.round(done/state.plans.length*100) : 0;
+  const bar = document.getElementById('prog'), pctEl = document.getElementById('prog-pct');
+  if (bar) bar.style.width = pct + '%'; if (pctEl) pctEl.textContent = pct + '% 完了';
+}
+
+/* ════ 日記 ════ */
+function renderDiaries() {
+  const list = document.getElementById('d-list'); if (!list) return;
+  list.innerHTML = '';
+  if (!diaries.length) { list.innerHTML = '<div class="card" style="color:#aaa;font-size:12px;text-align:center;padding:16px;">まだ日記がないよ。書いてみよう！</div>'; return; }
+  const hasKey = !!getApiKey();
+  diaries.forEach(d => {
+    const ml = MOOD_META[d.mood] || {txt:'',bg:'#F1EFE8',color:'#888780'};
+    const cmts = d.comments || [];
+    const isOpen = openDiaryId === d.id;
+    let aiHtml = '';
+    if (hasKey) {
+      if (d.aiMsg) aiHtml = `<div class="d-ai"><div class="d-ai-lbl">🤖 Claudeより</div><div class="d-ai-txt">${d.aiMsg}</div></div>`;
+      else aiHtml = `<div class="d-ai" id="ai-${d.id}"><button class="btn btn-purple" style="font-size:11px;padding:6px 14px;" onclick="genDiaryAI('${d.id}')">🤖 Claudeに感想をもらう</button></div>`;
+    }
+    let cmtHtml = '';
+    if (cmts.length) cmts.forEach(c => { const cfg = WHO_CFG[c.who]; cmtHtml += `<div class="cmt-item"><div class="cmt-av" style="background:${cfg.bg};border:1.5px solid ${cfg.border};">${cfg.ico}</div><div class="cmt-bbl" style="background:${cfg.bg};border:1px solid ${cfg.border};"><div class="cmt-who" style="color:${cfg.txt};">${cfg.label}</div><div class="cmt-txt">${c.text}</div></div></div>`; });
+    else cmtHtml = `<div class="no-cmt">まだコメントがないよ！💌</div>`;
+    const panel = isOpen ? `<div class="d-panel"><div class="cmt-list">${cmtHtml}</div><div class="cmt-inp"><div class="cmt-inp-ttl">💌 応援メッセージを書く</div><div class="who-row" id="wr-${d.id}"><span class="wb wm on" onclick="selWho(this,'${d.id}','mama')">👩 ママ</span><span class="wb wo" onclick="selWho(this,'${d.id}','ojii')">👴 おじいちゃん</span><span class="wb wb2" onclick="selWho(this,'${d.id}','obaa')">👵 おばあちゃん</span><span class="wb wj" onclick="selWho(this,'${d.id}','jibun')">⭐ 自分</span></div><textarea class="cmt-ta" id="ct-${d.id}" placeholder="今日の気持ちに寄り添ったメッセージを！"></textarea><div style="text-align:right;"><button class="btn btn-pink" style="font-size:12px;padding:7px 16px;" onclick="postCmt('${d.id}')">送る 💌</button></div></div></div>` : '';
+    list.innerHTML += `<div class="d-card"><div class="d-main"><div class="d-top"><span class="d-ico">${MOOD_ICO[d.mood]||''}</span><div class="d-meta"><span class="d-date">${d.date}</span><span class="d-pill" style="background:${ml.bg};color:${ml.color};">${ml.txt}</span></div></div><div class="d-body">${d.text}</div>${aiHtml}</div><button class="d-toggle" onclick="toggleDiary('${d.id}')"><span>${isOpen?'▲ 閉じる':'▼ 家族の応援メッセージを見る・書く'}</span><span class="d-cnt">${cmts.length}件</span></button>${panel}</div>`;
+  });
+}
+
+/* ════ 学び ════ */
+function renderLearn(text, action) {
+  const wrap = document.getElementById('learn-wrap'); if (!wrap) return;
+  wrap.innerHTML = `<div class="learn-banner"><div class="learn-tag">🤖 Claudeからの今日のメッセージ</div><div class="learn-msg">${text}</div><div class="learn-act"><div class="learn-act-lbl">✅ 今日やってみよう！</div><div class="learn-act-txt">${action}</div></div></div><div style="text-align:right;margin-bottom:11px;"><button class="btn btn-purple" onclick="refreshWisdom()" style="font-size:12px;padding:7px 16px;">🌀 別のメッセージを見る</button></div>`;
+}
+
+/* ════ AI呼び出し ════ */
+async function callClaude(prompt, maxTokens=400) {
+  const key = getApiKey(); if (!key) throw new Error('APIキーなし');
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})
+  });
+  if (!res.ok) throw new Error('APIエラー: ' + res.status);
+  const data = await res.json();
+  return data.content[0].text;
+}
+
+async function generateWisdom() {
+  const today = new Date().toISOString().split('T')[0];
+  const cached = await fsGet(wisdomRef());
+  if (cached && cached.date === today && cached.text) {
+    renderLearn(cached.text, cached.action);
+    renderHomeBanner(cached.text, cached.action);
+    return;
+  }
+  showBannerLoading();
+  const recentDiaries = diaries.slice(0,3);
+  const ctx = recentDiaries.length ? recentDiaries.map(d=>`・${d.date}（${MOOD_JP[d.mood]||d.mood}）「${d.text}」`).join('\n') : '（まだ日記がありません）';
+  const remaining = state.examDate ? Math.ceil((new Date(state.examDate+'T00:00:00')-new Date())/86400000) : null;
+  const prompt = `あなたは小学6年生の受験生（${state.school||'志望校'}を目指している）を応援するメンターです。今日は${today}、受験まであと${remaining!=null?remaining+'日':'不明'}です。\n最近の日記：\n${ctx}\nこの子に向けて今日の「学びのメッセージ」を作ってください。以下のJSON形式のみで答えてください：\n{"message":"今日の学びメッセージ（小学生でもわかる言葉で逆算力・継続力などのテーマを1つ選んで80〜120文字）","action":"今日すぐできる具体的なアクション（1つ、60文字以内）"}`;
+  try {
+    const raw = await callClaude(prompt, 300);
+    const json = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    await fsSet(wisdomRef(), {date:today, text:json.message, action:json.action});
+    renderLearn(json.message, json.action);
+    renderHomeBanner(json.message, json.action);
+  } catch(e) {
+    const fb = '今日も一歩ずつ。コツコツ続けることが合格への一番の近道だよ！';
+    const fa = '今日の勉強が終わったら、できたことを1つ日記に書いてみよう。';
+    renderLearn(fb, fa); renderHomeBanner(fb, fa);
   }
 }
 
-/* ════════════════════════════════
-   教科別
-════════════════════════════════ */
-function renderSubjects(){
-  const g=document.getElementById('subj-list'); if(!g)return; g.innerHTML='';
-  S.subjects.forEach(s=>{
-    const pct=Math.min(100,s.target?Math.round(s.score/s.target*100):s.score);
-    const tpct=Math.min(100,s.target?100:100);
-    g.innerHTML+=`<div class="subj-row">
-      <span class="subj-nm" style="color:${s.color};">${s.name}</span>
-      <div class="subj-bg">
-        <div class="subj-fill" style="width:${pct}%;background:${s.color};"></div>
-        ${s.target?`<div class="subj-tgt-line" style="left:${tpct}%;"></div>`:''}
-      </div>
-      <span class="subj-sc" style="color:${s.color};">${s.score}点</span>
-      <span class="subj-tg">目標${s.target||'?'}点</span>
-    </div>`;
-  });
-  // 設定フォーム
-  const sf=document.getElementById('score-form'); if(!sf)return; sf.innerHTML='';
-  S.subjects.forEach((s,i)=>{
-    sf.innerHTML+=`<div class="frow"><div class="flbl">${s.name}</div>
-      <input type="number" id="sc-${i}" min="0" max="200" value="${s.score}" placeholder="点数" />
-      <span style="font-size:11px;color:#AAA;flex-shrink:0;">目標</span>
-      <input type="number" id="tg-${i}" min="0" max="200" value="${s.target||''}" placeholder="目標点" />
-    </div>`;
-  });
+function showBannerLoading() {
+  const el = document.getElementById('ai-body');
+  if (el) el.innerHTML = `<div class="spin-row"><div class="spinner"></div>Claudeがメッセージを生成中…</div>`;
+}
+function renderHomeBanner(text, action) {
+  const el = document.getElementById('ai-body'); if (!el) return;
+  el.innerHTML = `<div class="ai-msg">${text}</div><div class="ai-act"><div class="ai-act-lbl">✅ 今日やってみよう！</div>${action}</div>`;
 }
 
-/* ════════════════════════════════
-   スケジュール
-════════════════════════════════ */
-function renderSchedule(){
-  const list=document.getElementById('tl-list'); if(!list)return;
-  const sorted=[...S.mocks].sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const today=new Date(); today.setHours(0,0,0,0);
-  list.innerHTML='';
-  if(!sorted.length){list.innerHTML='<div style="font-size:12px;color:#AAA;padding:6px 0;">まだ追加されていません</div>';return;}
-  sorted.forEach(m=>{
-    const d=new Date(m.date+'T00:00:00'),diff=Math.ceil((d-today)/86400000),past=diff<0,isE=m.type==='exam';
-    const dStr=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
-    const dTag=past?`<span class="tl-end">終了</span>`:`<span class="tl-dl">あと${diff}日</span>`;
-    const goalHtml=(m.gk||m.gs)?`<div class="goal-grid">
-      ${m.gk!=null?`<div class="goal-cell"><div class="goal-subj" style="color:#D4537E;">国語</div><div class="goal-val" style="color:#D4537E;">${m.gk}点</div></div>`:''}
-      ${m.gs!=null?`<div class="goal-cell"><div class="goal-subj" style="color:#5DCAA5;">算数</div><div class="goal-val" style="color:#5DCAA5;">${m.gs}点</div></div>`:''}
-    </div>`:'';
-    const resInp=past&&!m.result?`<div class="res-row"><input type="text" id="res-${m.id}" placeholder="結果を記録…" style="font-size:12px;padding:7px 10px;"/><button class="btn-sm" onclick="saveResult(${m.id})">保存</button></div>`:'';
-    const resTxt=m.result?`<div class="tl-result">&#128200; 結果：${m.result}</div>`:'';
-    list.innerHTML+=`<div class="tl-item">
-      <div class="tl-dot ${isE?'tl-exam':'tl-mock'}"></div>
-      <div class="tl-box">
-        <div class="tl-date">${dStr}${dTag}</div>
-        <div class="tl-name-row">
-          <div class="tl-name">${m.name}</div>
-          <button class="btn-del" onclick="delMock(${m.id})">削除</button>
-        </div>
-        <span class="tl-badge ${isE?'be':'bm'}">${isE?'受験本番':'模試・テスト'}</span>
-        ${goalHtml}${resTxt}${resInp}
-      </div>
-    </div>`;
-  });
-  renderNextEvt(sorted, today);
-}
+window.refreshWisdom = async function() {
+  await fsSet(wisdomRef(), {date:'',text:'',action:''});
+  showBannerLoading();
+  await generateWisdom();
+};
 
-function renderNextEvt(sorted, today){
-  const w=document.getElementById('next-evt-wrap'); if(!w)return;
-  const up=sorted.filter(m=>new Date(m.date+'T00:00:00')>=today);
-  if(!up.length){w.innerHTML='';return;}
-  const n=up[0],d=new Date(n.date+'T00:00:00'),diff=Math.ceil((d-today)/86400000);
-  const dStr=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
-  const isE=n.type==='exam';
-  const goals=[];if(n.gk)goals.push(`国語${n.gk}点`);if(n.gs)goals.push(`算数${n.gs}点`);
-  w.innerHTML=`<div class="next-evt">
-    <div class="next-lbl">&#128204; 次のイベント</div>
-    <div class="next-name" style="color:${isE?'#D4537E':'#085041'};">${n.name}</div>
-    <div class="next-sub">${dStr}（あと${diff}日）</div>
-    ${goals.length?`<div class="next-pill">&#127919; 目標：${goals.join('・')}</div>`:''}
-  </div>`;
-}
-
-/* ════════════════════════════════
-   計画
-════════════════════════════════ */
-function renderPlan(){
-  const list=document.getElementById('pl-list'); if(!list)return;
-  list.innerHTML='';
-  if(!S.plans.length){list.innerHTML='<div style="font-size:12px;color:#AAA;padding:7px 0;">やることを追加しよう！</div>';return;}
-  S.plans.forEach((p,i)=>{
-    const co=SUBJ_CO[p.subj]||'#888',bg=SUBJ_BG[p.subj]||'#F1EFE8';
-    list.innerHTML+=`<div class="pl-item">
-      <div class="pl-chk ${p.done?'on':''}" onclick="togglePlan(${i})"></div>
-      <span class="pl-txt ${p.done?'done':''}">${p.text}</span>
-      <span class="pl-tag" style="background:${bg};color:${co};">${p.subj}</span>
-    </div>`;
-  });
-  const done=S.plans.filter(p=>p.done).length;
-  const pct=S.plans.length?Math.round(done/S.plans.length*100):0;
-  const bar=document.getElementById('prog'),pel=document.getElementById('prog-pct');
-  if(bar)bar.style.width=pct+'%'; if(pel)pel.textContent=pct+'% 完了';
-}
-
-/* ════════════════════════════════
-   日記
-════════════════════════════════ */
-function renderDiaries(){
-  const list=document.getElementById('d-list'); if(!list)return;
-  list.innerHTML='';
-  if(!S.diaries.length){
-    list.innerHTML='<div class="card" style="color:#AAA;font-size:12px;text-align:center;padding:18px;">まだ日記がないよ。書いてみよう！</div>';return;
+window.genDiaryAI = async function(diaryId) {
+  const d = diaries.find(x=>x.id===diaryId); if (!d) return;
+  const el = document.getElementById('ai-'+diaryId);
+  if (el) el.innerHTML = `<div class="spin-row"><div class="spinner"></div>Claudeがコメントを考えています…</div>`;
+  const prompt = `小学6年生の受験生（${state.school||'志望校'}を目指している）が日記を書きました。\n気持ち：${MOOD_JP[d.mood]||d.mood}\n日記：「${d.text}」\nこの子に向けて温かく励ます一言コメントを50〜80文字で書いてください。コメントだけ返してください。`;
+  try {
+    const msg = await callClaude(prompt, 150);
+    await updateDoc(diaryDoc(diaryId), {aiMsg: msg.trim()});
+  } catch(e) {
+    if (el) el.innerHTML = `<div class="d-ai-lbl">🤖 Claudeより</div><div class="d-ai-txt">今日もよく頑張ったね！その調子で続けていこう！</div>`;
   }
-  const hasKey=!!getKey();
-  [...S.diaries].reverse().forEach(d=>{
-    const mm=MOOD_META[d.mood]||{pill:'',bg:'#F1EFE8',co:'#AAA'};
-    const cmts=d.comments||[];
-    const isOpen=S.openDiary===d.id;
+};
 
-    // AIメッセージ部分
-    let aiHtml='';
-    if(hasKey){
-      if(d.aiMsg){
-        aiHtml=`<div class="d-ai"><div class="d-ai-lbl">&#129302; Claudeより</div><div class="d-ai-txt">${d.aiMsg}</div></div>`;
-      }else{
-        aiHtml=`<div class="d-ai" id="dai-${d.id}"><button class="btn btn-purple" style="font-size:11px;padding:6px 14px;" onclick="genDiaryAI(${d.id})">&#129302; Claudeに感想をもらう</button></div>`;
-      }
-    }
-
-    // コメント一覧
-    let cmtHtml='';
-    if(cmts.length){
-      cmts.forEach(c=>{
-        const w=WHO[c.who];
-        cmtHtml+=`<div class="cmt-item">
-          <div class="cmt-av" style="background:${w.bg};border:1.5px solid ${w.bd};"><span style="font-size:15px;">${w.ico}</span></div>
-          <div class="cmt-bbl" style="background:${w.bg};border:1px solid ${w.bd};">
-            <div class="cmt-who" style="color:${w.tx};">${w.label}</div>
-            <div class="cmt-txt">${c.text}</div>
-          </div>
-        </div>`;
-      });
-    }else{
-      cmtHtml=`<div class="no-cmt">まだコメントがないよ &#128140;</div>`;
-    }
-
-    const panel=isOpen?`<div class="d-panel">
-      <div class="cmt-list">${cmtHtml}</div>
-      <div class="cmt-inp-area">
-        <div class="cmt-inp-ttl">&#128140; 応援メッセージを書く</div>
-        <div class="who-row" id="wr-${d.id}">
-          <span class="wb wm on" onclick="selWho(this,${d.id},'mama')">&#128105; ママ</span>
-          <span class="wb wo"    onclick="selWho(this,${d.id},'ojii')">&#128116; おじいちゃん</span>
-          <span class="wb wb2"   onclick="selWho(this,${d.id},'obaa')">&#128117; おばあちゃん</span>
-          <span class="wb wj"    onclick="selWho(this,${d.id},'jibun')">&#9733; 自分</span>
-        </div>
-        <textarea class="cmt-ta" id="cta-${d.id}" placeholder="今日の気持ちに寄り添ったメッセージを書いてあげよう！"></textarea>
-        <div style="text-align:right;">
-          <button class="btn btn-pink" style="font-size:12px;padding:8px 18px;" onclick="postCmt(${d.id})">送る &#128140;</button>
-        </div>
-      </div>
-    </div>`:''
-
-    list.innerHTML+=`<div class="d-card" id="dc-${d.id}">
-      <div class="d-main">
-        <div class="d-top">
-          <span class="d-ico">${MOOD_ICO[d.mood]||''}</span>
-          <div class="d-meta">
-            <span class="d-date">${d.date}</span>
-            <span class="d-pill" style="background:${mm.bg};color:${mm.co};">${mm.pill}</span>
-          </div>
-        </div>
-        <div class="d-body">${d.text}</div>
-        ${aiHtml}
-      </div>
-      <button class="d-toggle" onclick="toggleDiary(${d.id})">
-        <span>${isOpen?'▲ 閉じる':'▼ 家族の応援メッセージを見る・書く'}</span>
-        <span class="d-cmt-cnt">${cmts.length}件</span>
-      </button>
-      ${panel}
-    </div>`;
-  });
-}
-
-function toggleDiary(id){ S.openDiary=(S.openDiary===id)?null:id; renderDiaries(); }
-function selWho(el, did, who){
-  const row=document.getElementById('wr-'+did);
-  if(row) row.querySelectorAll('.wb').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-  if(!S.dWho) S.dWho={};
-  S.dWho[did]=who;
-}
-function postCmt(did){
-  const ta=document.getElementById('cta-'+did); if(!ta||!ta.value.trim())return;
-  const who=(S.dWho&&S.dWho[did])||'mama';
-  const diary=S.diaries.find(d=>d.id===did); if(!diary)return;
-  if(!diary.comments) diary.comments=[];
-  diary.comments.push({who, text:ta.value.trim()});
-  save(); renderDiaries();
-}
-function selMood(el, mood){
+/* ════ イベントハンドラ ════ */
+window.toggleDiary = function(id) { openDiaryId = (openDiaryId===id) ? null : id; renderDiaries(); };
+window.selWho = function(el, did, who) {
+  const row = document.getElementById('wr-'+did);
+  if (row) row.querySelectorAll('.wb').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on'); diaryWhoSel[did] = who;
+};
+window.postCmt = async function(did) {
+  const txa = document.getElementById('ct-'+did); if (!txa||!txa.value.trim()) return;
+  const who = diaryWhoSel[did] || 'mama';
+  await addDoc(cmtsCol(did), {who, text:txa.value.trim(), createdAt: new Date().toISOString()});
+  txa.value = '';
+};
+window.selMood = function(el, mood) {
   document.querySelectorAll('.mb').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on'); S.mood=mood;
-}
-function addDiary(){
-  const txt=document.getElementById('d-inp').value.trim(); if(!txt)return;
-  const t=new Date(), days=['日','月','火','水','木','金','土'];
-  const lbl=`${t.getMonth()+1}月${t.getDate()}日（${days[t.getDay()]}）`;
-  const nd={id:S.nid++, date:lbl, mood:S.mood, text:txt, comments:[], aiMsg:''};
-  S.diaries.push(nd); S.openDiary=nd.id;
-  document.getElementById('d-inp').value='';
-  save(); renderDiaries();
-  if(getKey()) genDiaryAI(nd.id);
-}
-
-/* ════════════════════════════════
-   設定
-════════════════════════════════ */
-function saveApiKey(){
-  const k=document.getElementById('api-inp').value.trim();
-  const st=document.getElementById('api-st');
-  if(!k){st.textContent='キーを入力してください';st.className='api-st err';return;}
-  setKey(k);
-  st.textContent='✓ 保存しました！Claudeが動き始めます';st.className='api-st ok';
-  S.todayMsg={date:'',text:'',action:''}; save();
-  genTodayMsg();
-}
-function saveCfg(){
-  const school=document.getElementById('cfg-school').value.trim();
-  const date=document.getElementById('cfg-exam').value;
-  if(school) S.school=school;
-  if(date){
-    S.examDate=date;
-    // 受験本番モックの日付も自動更新
-    const em=S.mocks.find(m=>m.type==='exam');
-    if(em){ em.date=date; if(school) em.name=school+' 受験本番'; }
-  }
-  save(); renderCountdown(); renderSchedule();
-  flash('cfg-saved');
-}
-function saveScores(){
-  S.subjects.forEach((s,i)=>{
-    const sv=document.getElementById('sc-'+i), tv=document.getElementById('tg-'+i);
-    if(sv){const v=parseInt(sv.value);if(!isNaN(v))s.score=Math.min(200,Math.max(0,v));}
-    if(tv){const v=parseInt(tv.value);if(!isNaN(v))s.target=Math.min(200,Math.max(0,v));}
-  });
-  save(); renderSubjects(); flash('sc-saved');
-}
-function renderCfg(){
-  const se=document.getElementById('cfg-school'), de=document.getElementById('cfg-exam'), ai=document.getElementById('api-inp');
-  if(se) se.value=S.school;
-  if(de) de.value=S.examDate;
-  if(ai&&getKey()) ai.value=getKey();
-}
-function flash(id){
-  const el=document.getElementById(id); if(!el)return;
-  el.style.display='block'; setTimeout(()=>{el.style.display='none';},2500);
-}
-
-/* ════════════════════════════════
-   計画・スケジュール 操作
-════════════════════════════════ */
-function togglePlan(i){ S.plans[i].done=!S.plans[i].done; save(); renderPlan(); }
-function addPlan(){
-  const inp=document.getElementById('pl-inp'), subj=document.getElementById('pl-subj').value;
-  if(!inp.value.trim())return;
-  S.plans.push({id:S.nid++, text:inp.value.trim(), subj, done:false});
-  inp.value=''; save(); renderPlan();
-}
-function addMock(){
-  const name=document.getElementById('mk-name').value.trim();
-  const date=document.getElementById('mk-date').value;
-  if(!name||!date){alert('名前と日付を入力してね！');return;}
-  const gk=document.getElementById('mk-gk').value;
-  const gs=document.getElementById('mk-gs').value;
-  S.mocks.push({id:S.nid++, name, date, type:document.getElementById('mk-type').value,
-    gk:gk?parseInt(gk):null, gs:gs?parseInt(gs):null, result:''});
+  el.classList.add('on'); selectedMood = mood;
+};
+window.addDiary = async function() {
+  const txt = document.getElementById('d-inp').value.trim(); if (!txt) return;
+  const t = new Date(); const days = ['日','月','火','水','木','金','土'];
+  const lbl = `${t.getMonth()+1}月${t.getDate()}日（${days[t.getDay()]}）`;
+  const ref = await addDoc(diariesCol(), {date:lbl, mood:selectedMood, text:txt, aiMsg:'', createdAt:t.toISOString()});
+  document.getElementById('d-inp').value = '';
+  openDiaryId = ref.id;
+  if (getApiKey()) window.genDiaryAI(ref.id);
+};
+window.togglePlan = async function(i) {
+  state.plans[i].done = !state.plans[i].done;
+  await fsSet(plansRef(), {list: state.plans}); renderPlan();
+};
+window.addPlan = async function() {
+  const inp = document.getElementById('pl-inp'), subj = document.getElementById('pl-subj').value;
+  if (!inp.value.trim()) return;
+  state.plans.push({id: Date.now()+'', text:inp.value.trim(), subject:subj, done:false});
+  inp.value = ''; await fsSet(plansRef(), {list: state.plans}); renderPlan();
+};
+window.addMock = async function() {
+  const name = document.getElementById('mk-name').value.trim(), date = document.getElementById('mk-date').value;
+  if (!name||!date) { alert('名前と日付を入力してね！'); return; }
+  const gk = document.getElementById('mk-gk').value, gs = document.getElementById('mk-gs').value;
+  state.mocks.push({id:Date.now()+'', name, date, type:document.getElementById('mk-type').value, goalKokugo:gk?parseInt(gk):null, goalSansu:gs?parseInt(gs):null, result:''});
   ['mk-name','mk-date','mk-gk','mk-gs'].forEach(id=>{document.getElementById(id).value='';});
-  save(); renderSchedule();
-}
-function saveResult(id){
-  const inp=document.getElementById('res-'+id); if(!inp)return;
-  const m=S.mocks.find(m=>m.id===id); if(m) m.result=inp.value.trim();
-  save(); renderSchedule();
-}
-function delMock(id){
-  if(!confirm('このイベントを削除してもいい？'))return;
-  S.mocks=S.mocks.filter(m=>m.id!==id); save(); renderSchedule();
-}
-
-/* ════════════════════════════════
-   まとめて描画
-════════════════════════════════ */
-function renderAll(){
-  renderCountdown();
-  renderWeek();
+  await fsSet(mocksRef(), {list: state.mocks}); renderTimeline();
+};
+window.saveResult = async function(id) {
+  const inp = document.getElementById('res-'+id); if (!inp) return;
+  const m = state.mocks.find(m=>m.id===id); if (m) m.result = inp.value.trim();
+  await fsSet(mocksRef(), {list: state.mocks}); renderTimeline();
+};
+window.delMock = async function(id) {
+  if (!confirm('このイベントを削除してもいい？')) return;
+  state.mocks = state.mocks.filter(m=>m.id!==id);
+  await fsSet(mocksRef(), {list: state.mocks}); renderTimeline();
+};
+window.saveSettings = async function() {
+  const school = document.getElementById('school-inp').value.trim();
+  const date   = document.getElementById('exam-inp').value;
+  if (school) state.school = school; if (date) state.examDate = date;
+  await fsSet(settingsRef(), {school:state.school, examDate:state.examDate, subjects:state.subjects});
+  updateCD(); renderTimeline();
+  const el = document.getElementById('cfg-saved'); el.style.display='block'; setTimeout(()=>el.style.display='none',2500);
+};
+window.saveScores = async function() {
+  state.subjects.forEach((s,i) => {
+    const si = document.getElementById('sc-'+i), ti = document.getElementById('tg-'+i);
+    if (si){const v=parseInt(si.value);if(!isNaN(v))s.score=Math.min(200,Math.max(0,v));}
+    if (ti){const v=parseInt(ti.value);if(!isNaN(v))s.target=Math.min(200,Math.max(0,v));}
+  });
+  await fsSet(settingsRef(), {school:state.school, examDate:state.examDate, subjects:state.subjects});
   renderSubjects();
-  renderSchedule();
-  renderPlan();
-  renderDiaries();
-  renderCfg();
-  // 学びタブのno-api表示
-  const na=document.getElementById('learn-noapi');
-  if(na) na.style.display=getKey()?'none':'block';
+  const el = document.getElementById('score-saved'); el.style.display='block'; setTimeout(()=>el.style.display='none',2500);
+};
+window.saveApiKey = function() {
+  const k = document.getElementById('api-inp').value.trim();
+  if (!k) { const st=document.getElementById('api-st'); st.textContent='キーを入力してください'; st.className='api-st err'; return; }
+  setApiKey(k);
+  const st = document.getElementById('api-st'); st.textContent='✓ 保存しました！'; st.className='api-st ok';
+  generateWisdom();
+};
+
+/* ════ 設定タブ表示 ════ */
+function renderSettings() {
+  const si = document.getElementById('school-inp'), ed = document.getElementById('exam-inp');
+  if (si) si.value = state.school; if (ed) ed.value = state.examDate;
+  const ki = document.getElementById('api-inp'); if (ki && getApiKey()) ki.value = getApiKey();
 }
 
-/* ════════════════════════════════
-   起動
-════════════════════════════════ */
-renderAll();
-if(getKey()) genTodayMsg();
-setInterval(renderCountdown, 30000);
+function renderAll() {
+  updateCD(); renderWeek(); renderSubjects(); renderTimeline(); renderPlan(); renderDiaries(); renderSettings();
+}
+
+/* ════ 起動 ════ */
+loadAll();
+setInterval(updateCD, 30000);
 </script>
 </body>
 </html>
