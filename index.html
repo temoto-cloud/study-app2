@@ -10,7 +10,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Hiragino Kuma Gothic ProN','Hiragino Sans','Yu Gothic',sans-serif;background:#FDF6F9;color:#2C2C2A;min-height:100vh;}
-.app{max-width:480px;margin:0 auto;padding:0 0 80px;background:#FDF6F9;min-height:100vh;position:relative;}
+.app{max-width:480px;margin:0 auto;padding:0 0 80px;background:#FDF6F9;min-height:100vh;}
 @media(min-width:768px){
   body{background:#F0E8EE;}
   .app{max-width:720px;min-height:100vh;}
@@ -405,12 +405,12 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
     <div class="saved" id="score-saved">✓ 保存しました！</div>
   </div>
   <div style="text-align:center;padding:8px 0 4px;">
-    <button onclick="openManager()" style="background:none;border:none;font-size:11px;color:#bbb;cursor:pointer;font-family:inherit;padding:4px;">てつやログイン</button>
+    <button onclick="openManager()" style="background:none;border:none;font-size:10px;color:#ccc;cursor:pointer;font-family:inherit;">⚙</button>
   </div>
 </div>
 
 <!-- ファミリーマネージャー画面 -->
-<div id="manager-screen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;overflow-y:auto;">
+<div id="manager-screen" style="display:none;position:absolute;top:0;left:0;right:0;z-index:200;min-height:100%;">
 
   <!-- PINロック画面 -->
   <div id="pin-screen" style="background:#1E1035;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;">
@@ -503,13 +503,13 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
   </div>
 </div>
 
-<nav id="main-nav">
-  <button class="nb on" data-tab="home"><span class="nb-ico">🏠</span><span class="nb-lbl">ホーム</span></button>
-  <button class="nb" data-tab="sch"><span class="nb-ico">📅</span><span class="nb-lbl">スケジュール</span></button>
-  <button class="nb" data-tab="plan"><span class="nb-ico">📝</span><span class="nb-lbl">計画</span></button>
-  <button class="nb" data-tab="diary"><span class="nb-ico">📓</span><span class="nb-lbl">日記</span></button>
-  <button class="nb" data-tab="learn"><span class="nb-ico">🌟</span><span class="nb-lbl">学び</span></button>
-  <button class="nb" data-tab="cfg"><span class="nb-ico">⚙️</span><span class="nb-lbl">設定</span></button>
+<nav>
+  <button class="nb on" onclick="sw('home',this)"><span class="nb-ico">🏠</span><span class="nb-lbl">ホーム</span></button>
+  <button class="nb" onclick="sw('sch',this)"><span class="nb-ico">📅</span><span class="nb-lbl">スケジュール</span></button>
+  <button class="nb" onclick="sw('plan',this)"><span class="nb-ico">📝</span><span class="nb-lbl">計画</span></button>
+  <button class="nb" onclick="sw('diary',this)"><span class="nb-ico">📓</span><span class="nb-lbl">日記</span></button>
+  <button class="nb" onclick="sw('learn',this)"><span class="nb-ico">🌟</span><span class="nb-lbl">学び</span></button>
+  <button class="nb" onclick="sw('cfg',this)"><span class="nb-ico">⚙️</span><span class="nb-lbl">設定</span></button>
 </nav>
 </div>
 
@@ -727,13 +727,6 @@ function sw(name, el) {
   }
 }
 window.sw = sw;
-
-// navボタンにイベントリスナーを設定（module読み込み後に確実に動く）
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('#main-nav .nb').forEach(btn => {
-    btn.addEventListener('click', () => sw(btn.dataset.tab, btn));
-  });
-});
 
 /* ════ カウントダウン ════ */
 function updateCD() {
@@ -1491,4 +1484,4 @@ window.sendMgrChat = async function() {
 };
 </script>
 </body>
-</html>
+</html><!DOCTYPE html>
