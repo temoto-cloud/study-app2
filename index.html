@@ -177,6 +177,36 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
 .learn-act-lbl{font-size:10px;font-weight:700;color:#7F77DD;margin-bottom:2px;}
 .learn-act-txt{font-size:12px;color:#2C2C2A;line-height:1.6;}
 .no-api{background:#F9F5F7;border-radius:12px;padding:13px;border:1px solid #e8d5de;margin-bottom:11px;font-size:13px;color:#555;line-height:1.7;}
+/* ── 読み物記事 ── */
+.article-card{background:#fff;border:0.5px solid #e8d5de;border-radius:13px;margin-bottom:11px;overflow:hidden;}
+.article-header{padding:13px 13px 10px;}
+.article-theme-pill{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;display:inline-block;margin-bottom:7px;}
+.article-title{font-size:16px;font-weight:800;color:#2C2C2A;line-height:1.4;margin-bottom:8px;}
+.article-meta{font-size:11px;color:#aaa;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.article-body{font-size:14px;color:#2C2C2A;line-height:1.85;white-space:pre-wrap;}
+.article-body.collapsed{max-height:120px;overflow:hidden;position:relative;}
+.article-body.collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(transparent,#fff);}
+.read-toggle{width:100%;border:none;background:#F9F5F7;border-top:0.5px solid #e8d5de;padding:10px;font-size:12px;font-weight:700;color:#7F77DD;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;}
+.read-toggle:active{background:#EEEDFE;}
+.rating-area{padding:12px 13px;border-top:0.5px solid #e8d5de;background:#FDFAFC;}
+.rating-ttl{font-size:11px;font-weight:700;color:#2C2C2A;margin-bottom:8px;}
+.rating-btns{display:flex;gap:8px;}
+.rb{flex:1;padding:8px 4px;border-radius:10px;border:1.5px solid transparent;font-size:12px;font-weight:700;cursor:pointer;text-align:center;font-family:inherit;-webkit-tap-highlight-color:transparent;transition:all 0.12s;}
+.rb:active{transform:scale(0.95);}
+.rb-fun{background:#FBEAF0;color:#993556;border-color:#F4C0D1;}
+.rb-hard{background:#FAEEDA;color:#854F0B;border-color:#FAC775;}
+.rb-ok{background:#E1F5EE;color:#085041;border-color:#9FE1CB;}
+.rb.selected{outline:2.5px solid currentColor;outline-offset:1px;}
+.rating-done{font-size:12px;color:#1D9E75;font-weight:700;padding:4px 0;}
+/* ── 週間ランキング ── */
+.ranking-card{background:#fff;border:0.5px solid #e8d5de;border-radius:13px;padding:13px;margin-bottom:11px;}
+.ranking-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:0.5px solid #EDE8EA;}
+.ranking-item:last-child{border-bottom:none;}
+.rank-num{font-size:16px;font-weight:800;min-width:24px;text-align:center;}
+.rank-bar-bg{flex:1;background:#EDE8EA;border-radius:4px;height:8px;overflow:hidden;}
+.rank-bar{height:100%;border-radius:4px;background:#7F77DD;}
+.rank-theme{font-size:12px;font-weight:700;color:#2C2C2A;min-width:80px;}
+.rank-cnt{font-size:11px;color:#aaa;min-width:32px;text-align:right;}
 
 /* ── 設定 ── */
 .api-row{display:flex;gap:6px;}
@@ -325,18 +355,13 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
 
 <!-- 学び -->
 <div id="s-learn" class="section">
-  <div class="sec-ttl">🌟 今日の学び</div>
-  <div id="learn-wrap">
-    <div class="no-api">🔒 設定タブでAPIキーを入力すると、Claudeがオリジナルの学びメッセージを毎日届けます！</div>
+  <div class="sec-ttl">📖 今日の読み物</div>
+  <div id="article-wrap">
+    <div class="no-api" id="article-no-api">🔒 設定タブでAPIキーを入力すると、Claudeが毎日オリジナル記事を書いてくれます！</div>
   </div>
-  <div class="card">
-    <div class="card-ttl">💡 こんな内容が届きます</div>
-    <div style="font-size:12px;color:#aaa;line-height:1.8;">
-      😊 <b style="color:#2C2C2A;">嬉しい日</b> → 成功をさらに伸ばす逆算の考え方<br>
-      😓 <b style="color:#2C2C2A;">疲れた日</b> → 休息も勉強のうち、継続のコツ<br>
-      😢 <b style="color:#2C2C2A;">くじけた日</b> → 失敗から立ち上がる心の持ち方<br>
-      🔥 <b style="color:#2C2C2A;">やる気の日</b> → そのエネルギーを最大化する方法
-    </div>
+  <div class="ranking-card" id="ranking-card" style="display:none;">
+    <div class="card-ttl">📊 今週よく読んだテーマ</div>
+    <div id="ranking-list"></div>
   </div>
 </div>
 
@@ -473,6 +498,8 @@ const plansRef     = () => doc(db, 'families', FAMILY_ID, 'data', 'plans');
 const weekRef      = () => doc(db, 'families', FAMILY_ID, 'weeks', getWeekKey(0));
 const weekRefByKey = (k) => doc(db, 'families', FAMILY_ID, 'weeks', k);
 const wisdomRef    = () => doc(db, 'families', FAMILY_ID, 'data', 'wisdom');
+const articleRef   = () => doc(db, 'families', FAMILY_ID, 'data', 'article');
+const ratingsCol   = () => collection(db, 'families', FAMILY_ID, 'ratings');
 const diariesCol   = () => collection(db, 'families', FAMILY_ID, 'diaries');
 const diaryDoc     = id => doc(db, 'families', FAMILY_ID, 'diaries', id);
 const cmtsCol      = id => collection(db, 'families', FAMILY_ID, 'diaries', id, 'comments');
@@ -528,7 +555,11 @@ async function loadAll() {
 
   renderAll();
   listenDiaries();
-  if (getApiKey()) generateWisdom();
+  if (getApiKey()) {
+    generateWisdom();
+    generateArticle();
+    renderRanking();
+  }
 }
 
 /* ════ やることリスト 自動リセット ════ */
@@ -579,7 +610,10 @@ function sw(name, el) {
   document.getElementById('s-' + name).classList.add('on');
   if (el) el.classList.add('on');
   renderAll();
-  if ((name === 'home' || name === 'learn') && getApiKey()) generateWisdom();
+  if (getApiKey()) {
+    if (name === 'home' || name === 'learn') generateWisdom();
+    if (name === 'learn') { generateArticle(); renderRanking(); }
+  }
 }
 window.sw = sw;
 
@@ -757,6 +791,180 @@ function renderDiaries() {
   });
 }
 
+/* ════ 記事テーマ ════ */
+const THEMES = [
+  {key:'逆算',    label:'逆算力',  bg:'#FBEAF0', color:'#993556'},
+  {key:'継続',    label:'継続力',  bg:'#E1F5EE', color:'#085041'},
+  {key:'習慣',    label:'習慣の力',bg:'#EEEDFE', color:'#3C3489'},
+  {key:'成長',    label:'成長マインド',bg:'#FAEEDA',color:'#854F0B'},
+  {key:'感謝',    label:'感謝の力',bg:'#E6F1FB', color:'#0C447C'},
+  {key:'挑戦',    label:'挑戦する心',bg:'#FCEBEB',color:'#A32D2D'},
+  {key:'集中',    label:'集中力',  bg:'#EAF3DE', color:'#27500A'},
+  {key:'自信',    label:'自信の育て方',bg:'#FAECE7',color:'#712B13'},
+];
+
+function todayTheme() {
+  const d = new Date();
+  const seed = d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
+  return THEMES[seed % THEMES.length];
+}
+
+/* ════ 記事生成 ════ */
+async function generateArticle() {
+  const noApi = document.getElementById('article-no-api');
+  if (!getApiKey()) { if(noApi) noApi.style.display='block'; return; }
+  if (noApi) noApi.style.display='none';
+
+  const today = new Date().toISOString().split('T')[0];
+  const cached = await fsGet(articleRef());
+  if (cached && cached.date === today && cached.body) {
+    renderArticle(cached);
+    return;
+  }
+
+  const theme = todayTheme();
+  const school = state.school || '志望校';
+  const remaining = state.examDate ? Math.ceil((new Date(state.examDate+'T00:00:00')-new Date())/86400000) : null;
+
+  showArticleLoading(theme);
+
+  const prompt = `あなたは小学6年生の受験生向けに教育記事を書くライターです。
+受験生の情報：志望校「${school}」、受験まであと${remaining!=null?remaining+'日':'不明'}。
+
+今日のテーマ：「${theme.key}」（${theme.label}）
+
+以下の条件で記事を書いてください：
+- 小学6年生でも読める言葉・文体
+- 読むのに5〜8分かかる分量（600〜900字）
+- 具体的なエピソードや例え話を必ず入れる
+- 受験勉強に直結する実践的な内容
+- 最後に「今日からできること」を1つ書く
+- タイトルも考える
+
+以下のJSON形式のみで返してください：
+{"title":"記事タイトル","theme":"${theme.key}","body":"本文（改行は\nで）","action":"今日からできること（1文）"}`;
+
+  try {
+    const raw = await callClaude(prompt, 1000);
+    const json = JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());
+    const data = {date:today, title:json.title, theme:json.theme||theme.key, body:json.body, action:json.action, rating:''};
+    await fsSet(articleRef(), data);
+    renderArticle(data);
+  } catch(e) {
+    renderArticleError();
+  }
+}
+
+function showArticleLoading(theme) {
+  const wrap = document.getElementById('article-wrap'); if(!wrap) return;
+  wrap.innerHTML = `<div class="article-card"><div class="article-header"><div class="article-theme-pill" style="background:${theme.bg};color:${theme.color};">${theme.label}</div><div class="spin-row" style="margin-top:8px;"><div class="spinner"></div>Claudeが今日の記事を書いています…</div></div></div>`;
+}
+
+function renderArticle(data) {
+  const wrap = document.getElementById('article-wrap'); if(!wrap) return;
+  const theme = THEMES.find(t=>t.key===data.theme) || THEMES[0];
+  const rated = data.rating ? true : false;
+  const ratingHtml = rated
+    ? `<div class="rating-area"><div class="rating-done">✓ 評価済み：${data.rating === 'fun'?'⭐️ 面白かった':data.rating==='hard'?'🤔 難しかった':'😊 ふつう'}</div></div>`
+    : `<div class="rating-area"><div class="rating-ttl">この記事どうだった？</div><div class="rating-btns"><button class="rb rb-fun" onclick="rateArticle('fun')">⭐️ 面白かった</button><button class="rb rb-hard" onclick="rateArticle('hard')">🤔 難しかった</button><button class="rb rb-ok" onclick="rateArticle('ok')">😊 ふつう</button></div></div>`;
+
+  wrap.innerHTML = `<div class="article-card">
+    <div class="article-header">
+      <div class="article-theme-pill" style="background:${theme.bg};color:${theme.color};">${theme.label}</div>
+      <div class="article-title">${data.title}</div>
+      <div class="article-meta"><span>📖 今日の読み物</span><span>5〜8分</span></div>
+      <div class="article-body collapsed" id="article-body">${data.body}</div>
+    </div>
+    <button class="read-toggle" id="read-toggle" onclick="toggleArticle()">▼ 続きを読む</button>
+    <div class="article-header" style="padding-top:6px;padding-bottom:10px;border-top:0.5px solid #EDE8EA;">
+      <div style="font-size:11px;font-weight:700;color:#7F77DD;margin-bottom:3px;">✅ 今日からできること</div>
+      <div style="font-size:13px;color:#2C2C2A;line-height:1.6;">${data.action}</div>
+    </div>
+    ${ratingHtml}
+  </div>`;
+}
+
+function renderArticleError() {
+  const wrap = document.getElementById('article-wrap'); if(!wrap) return;
+  wrap.innerHTML = `<div class="card" style="color:#aaa;font-size:13px;text-align:center;padding:20px;">記事の生成に失敗しました。<br>しばらくしてからもう一度お試しください。<br><button class="btn btn-purple" onclick="generateArticle()" style="margin-top:10px;font-size:12px;padding:7px 16px;">🔄 再試行</button></div>`;
+}
+
+window.toggleArticle = function() {
+  const body = document.getElementById('article-body');
+  const btn = document.getElementById('read-toggle');
+  if (!body) return;
+  if (body.classList.contains('collapsed')) {
+    body.classList.remove('collapsed');
+    if(btn) btn.textContent = '▲ 閉じる';
+  } else {
+    body.classList.add('collapsed');
+    if(btn) btn.textContent = '▼ 続きを読む';
+  }
+};
+
+window.rateArticle = async function(rating) {
+  const today = new Date().toISOString().split('T')[0];
+  const cached = await fsGet(articleRef());
+  if (!cached) return;
+  await fsSet(articleRef(), {rating});
+  // 評価履歴をratingsコレクションに保存
+  await addDoc(ratingsCol(), {
+    date: today,
+    theme: cached.theme || '',
+    title: cached.title || '',
+    rating,
+    createdAt: new Date().toISOString()
+  });
+  renderArticle({...cached, rating});
+  renderRanking();
+};
+
+/* ════ 週間ランキング ════ */
+async function renderRanking() {
+  const card = document.getElementById('ranking-card');
+  const list = document.getElementById('ranking-list');
+  if (!card || !list) return;
+
+  try {
+    // 過去7日分の評価を取得
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    const weekAgoStr = weekAgo.toISOString().split('T')[0];
+
+    const q = query(ratingsCol(), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
+    const ratings = snap.docs.map(d=>d.data()).filter(r=>r.date >= weekAgoStr);
+
+    if (ratings.length === 0) { card.style.display='none'; return; }
+    card.style.display='block';
+
+    // テーマ別に集計（面白かったを重点）
+    const counts = {};
+    ratings.forEach(r => {
+      if (!counts[r.theme]) counts[r.theme] = {total:0, fun:0};
+      counts[r.theme].total++;
+      if (r.rating === 'fun') counts[r.theme].fun++;
+    });
+
+    const sorted = Object.entries(counts).sort((a,b)=>b[1].fun-a[1].fun||b[1].total-a[1].total).slice(0,5);
+    const maxFun = Math.max(...sorted.map(([,v])=>v.fun), 1);
+    const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+    const themeObj = {};
+    THEMES.forEach(t => themeObj[t.key] = t);
+
+    list.innerHTML = sorted.map(([theme,v],i) => {
+      const t = themeObj[theme] || {label:theme, bg:'#F1EFE8', color:'#888780'};
+      const pct = Math.round(v.fun/maxFun*100);
+      return `<div class="ranking-item">
+        <span class="rank-num">${medals[i]||''}</span>
+        <span class="rank-theme"><span style="background:${t.bg};color:${t.color};padding:2px 7px;border-radius:7px;font-size:11px;font-weight:700;">${t.label}</span></span>
+        <div class="rank-bar-bg"><div class="rank-bar" style="width:${pct}%;"></div></div>
+        <span class="rank-cnt">⭐️${v.fun}/${v.total}</span>
+      </div>`;
+    }).join('');
+  } catch(e) { card.style.display='none'; }
+}
+
 /* ════ 学び ════ */
 function renderLearn(text, action) {
   const wrap = document.getElementById('learn-wrap'); if (!wrap) return;
@@ -916,6 +1124,8 @@ window.saveApiKey = async function() {
   inp.value = '••••••••••••••••';
   st.textContent = '✓ 保存しました！全員の端末で使えるようになります'; st.className = 'api-st ok';
   generateWisdom();
+  generateArticle();
+  renderRanking();
 };
 
 /* ════ 設定タブ表示 ════ */
