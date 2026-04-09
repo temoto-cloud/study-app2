@@ -193,6 +193,20 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
 .sync-err{background:#E24B4A;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
 .sync-bar{font-size:10px;color:#aaa;text-align:center;padding:4px;display:flex;align-items:center;justify-content:center;gap:4px;}
+.graph-wrap{margin-top:11px;padding-top:11px;border-top:0.5px solid #EDE8EA;}
+.graph-ttl{font-size:11px;font-weight:700;color:#2C2C2A;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.week-compare{font-size:11px;font-weight:700;padding:2px 9px;border-radius:9px;}
+.compare-up{background:#E1F5EE;color:#085041;}
+.compare-down{background:#FCEBEB;color:#A32D2D;}
+.compare-same{background:#F1EFE8;color:#888780;}
+.bar-chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-bottom:4px;}
+.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;}
+.bar-val{font-size:9px;color:#aaa;margin-bottom:2px;font-weight:600;min-height:12px;}
+.bar-body{width:100%;border-radius:4px 4px 0 0;min-height:2px;}
+.bar-lbl{font-size:9px;color:#aaa;margin-top:3px;font-weight:600;text-align:center;}
+.bar-col.cur .bar-body{background:#D4537E;}
+.bar-col.cur .bar-lbl{color:#D4537E;font-weight:800;}
+.bar-col.old .bar-body{background:#EDE8EA;}
 </style>
 </head>
 <body>
@@ -234,6 +248,17 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
         <button class="btn-sm" onclick="saveTodayTime()">記録</button>
       </div>
       <div style="margin-top:6px;font-size:11px;color:#aaa;">今週の合計：<b id="wk-sum" style="color:#D4537E;">0分</b></div>
+      <div class="graph-wrap">
+        <div class="graph-ttl">
+          <span>📊 過去4週間の勉強時間</span>
+          <span class="week-compare compare-same" id="week-compare">集計中...</span>
+        </div>
+        <div class="bar-chart" id="bar-chart"></div>
+        <div style="display:flex;gap:10px;font-size:10px;color:#aaa;margin-top:2px;">
+          <span style="display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;background:#D4537E;border-radius:2px;display:inline-block;"></span>今週</span>
+          <span style="display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;background:#EDE8EA;border-radius:2px;display:inline-block;"></span>先週以前</span>
+        </div>
+      </div>
     </div>
     <div class="card">
       <div class="card-ttl">📚 教科別 達成度</div>
@@ -325,7 +350,7 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
       <button class="btn btn-purple" onclick="saveApiKey()" style="padding:8px 14px;font-size:12px;">保存</button>
     </div>
     <div class="api-st" id="api-st"></div>
-    <div class="api-tip">console.anthropic.com でAPIキーを取得できます。キーはこの端末のみに保存されます。</div>
+    <div class="api-tip">console.anthropic.com でAPIキーを取得できます。<b style="color:#2C2C2A;">一度設定すれば家族全員の端末で自動的に使えます。</b></div>
   </div>
   <div class="card">
     <div class="card-ttl">🎓 志望校・受験日</div>
@@ -390,11 +415,11 @@ const MOOD_META = {
 };
 const SUBJ_COLOR = {'国語':'#D4537E','算数':'#5DCAA5','その他':'#888780'};
 const SUBJ_BG    = {'国語':'#FBEAF0','算数':'#E1F5EE','その他':'#F1EFE8'};
-const API_KEY_STORE = 'juken_api_key';
 
-/* ════ ローカルのみ保存 ════ */
-const getApiKey = () => localStorage.getItem(API_KEY_STORE) || '';
-const setApiKey = k => localStorage.setItem(API_KEY_STORE, k);
+/* ════ APIキー（Firestoreに保存） ════ */
+let _cachedApiKey = '';
+const getApiKey = () => _cachedApiKey;
+const apiKeyRef = () => doc(db, 'families', FAMILY_ID, 'data', 'apikey');
 
 /* ════ 状態（Firestoreから読む） ════ */
 let state = {
@@ -427,10 +452,26 @@ function syncStatus(status) {
 }
 
 /* ════ Firestore ヘルパー ════ */
+/* ════ 週キー生成（YYYY-WW形式） ════ */
+function getWeekKey(offset=0) {
+  const d = new Date();
+  d.setDate(d.getDate() - offset * 7);
+  // 月曜始まりの週番号
+  const startOfYear = new Date(d.getFullYear(), 0, 1);
+  const weekNum = Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+  return d.getFullYear() + '-W' + String(weekNum).padStart(2,'0');
+}
+function getWeekLabel(offset=0) {
+  if (offset === 0) return '今週';
+  if (offset === 1) return '先週';
+  return offset + '週前';
+}
+
 const settingsRef  = () => doc(db, 'families', FAMILY_ID, 'data', 'settings');
 const mocksRef     = () => doc(db, 'families', FAMILY_ID, 'data', 'mocks');
 const plansRef     = () => doc(db, 'families', FAMILY_ID, 'data', 'plans');
-const weekRef      = () => doc(db, 'families', FAMILY_ID, 'data', 'week');
+const weekRef      = () => doc(db, 'families', FAMILY_ID, 'weeks', getWeekKey(0));
+const weekRefByKey = (k) => doc(db, 'families', FAMILY_ID, 'weeks', k);
 const wisdomRef    = () => doc(db, 'families', FAMILY_ID, 'data', 'wisdom');
 const diariesCol   = () => collection(db, 'families', FAMILY_ID, 'diaries');
 const diaryDoc     = id => doc(db, 'families', FAMILY_ID, 'diaries', id);
@@ -451,24 +492,59 @@ async function fsGet(ref) {
 async function loadAll() {
   syncStatus('ing');
   try {
-    const [cfg, mks, pls, wk] = await Promise.all([
+    const [cfg, mks, pls, wk, apiKeyData] = await Promise.all([
       fsGet(settingsRef()), fsGet(mocksRef()),
-      fsGet(plansRef()),    fsGet(weekRef())
+      fsGet(plansRef()),    fsGet(weekRef()),
+      fsGet(apiKeyRef())
     ]);
+    if (apiKeyData && apiKeyData.key) {
+      _cachedApiKey = apiKeyData.key;
+      // 設定タブの入力欄にも反映
+      const ki = document.getElementById('api-inp');
+      if (ki) ki.value = '••••••••••••••••';
+    }
     if (cfg) {
       state.school    = cfg.school    || '';
       state.examDate  = cfg.examDate  || '';
       state.subjects  = cfg.subjects  || state.subjects;
     }
     if (mks) state.mocks    = mks.list  || [];
-    if (pls) state.plans    = pls.list  || [];
+    if (pls) {
+      state.plans = pls.list || [];
+      state.lastPlanReset = pls.lastReset || '';
+    }
     if (wk)  { state.weekDone = wk.done || state.weekDone; state.weekTime = wk.time || state.weekTime; }
+    // 過去3週分のデータも取得
+    const pastWeeks = await Promise.all([1,2,3].map(i => fsGet(weekRefByKey(getWeekKey(i)))));
+    state.weekHistory = pastWeeks.map((w,i) => ({
+      label: getWeekLabel(i+1),
+      total: w ? (w.time||[]).reduce((a,b)=>a+b,0) : 0
+    }));
     syncStatus('ok');
   } catch(e) { syncStatus('err'); }
+
+  // やることリスト：前日以前に完了したものを自動リセット
+  await autoResetPlans();
 
   renderAll();
   listenDiaries();
   if (getApiKey()) generateWisdom();
+}
+
+/* ════ やることリスト 自動リセット ════ */
+async function autoResetPlans() {
+  const today = new Date().toISOString().split('T')[0];
+  const lastReset = state.lastPlanReset || '';
+  if (lastReset >= today) return; // 今日すでにリセット済み
+  // 完了済みのものを削除
+  const before = state.plans.length;
+  state.plans = state.plans.filter(p => !p.done);
+  if (state.plans.length < before) {
+    await fsSet(plansRef(), {list: state.plans, lastReset: today});
+  } else {
+    await fsSet(plansRef(), {lastReset: today});
+  }
+  state.lastPlanReset = today;
 }
 
 /* ════ 日記リアルタイム購読 ════ */
@@ -546,6 +622,7 @@ function renderWeek() {
   const total = (state.weekTime || []).reduce((a,b) => a+b, 0);
   const el = document.getElementById('wk-sum');
   if (el) el.textContent = total + '分（' + Math.floor(total/60) + '時間' + total%60 + '分）';
+  renderGraph();
 }
 
 window.saveTodayTime = function() {
@@ -558,6 +635,50 @@ window.saveTodayTime = function() {
     renderWeek(); inp.value = '';
   }
 };
+
+/* ════ グラフ描画 ════ */
+function renderGraph() {
+  const chart = document.getElementById('bar-chart');
+  const compareEl = document.getElementById('week-compare');
+  if (!chart) return;
+
+  const thisWeekTotal = (state.weekTime || []).reduce((a,b) => a+b, 0);
+  const history = state.weekHistory || [];
+  const lastWeekTotal = history[0] ? history[0].total : 0;
+
+  // 週ラベルと合計（4週分）
+  const weeks = [
+    ...history.slice(0,3).reverse().map((w,i) => ({label: getWeekLabel(3-i), total: w.total, cur: false})),
+    {label: '今週', total: thisWeekTotal, cur: true}
+  ];
+
+  const maxVal = Math.max(...weeks.map(w => w.total), 1);
+
+  chart.innerHTML = '';
+  weeks.forEach(w => {
+    const pct = Math.round(w.total / maxVal * 100);
+    const h = Math.max(pct, 2);
+    const valTxt = w.total > 0 ? (w.total >= 60 ? Math.floor(w.total/60)+'h' : w.total+'m') : '';
+    const col = document.createElement('div');
+    col.className = 'bar-col ' + (w.cur ? 'cur' : 'old');
+    col.innerHTML = '<div class="bar-val">' + valTxt + '</div><div class="bar-body" style="height:' + h + '%;"></div><div class="bar-lbl">' + w.label + '</div>';
+    chart.appendChild(col);
+  });
+
+  // 先週比
+  if (!compareEl) return;
+  if (lastWeekTotal === 0 && thisWeekTotal === 0) {
+    compareEl.textContent = '記録なし'; compareEl.className = 'week-compare compare-same';
+  } else if (lastWeekTotal === 0) {
+    compareEl.textContent = '今週から記録スタート！'; compareEl.className = 'week-compare compare-up';
+  } else {
+    const diff = thisWeekTotal - lastWeekTotal;
+    const sign = diff >= 0 ? '+' : '';
+    if (diff > 0) { compareEl.textContent = '先週比 ' + sign + diff + '分 ↑'; compareEl.className = 'week-compare compare-up'; }
+    else if (diff < 0) { compareEl.textContent = '先週比 ' + diff + '分 ↓'; compareEl.className = 'week-compare compare-down'; }
+    else { compareEl.textContent = '先週と同じ'; compareEl.className = 'week-compare compare-same'; }
+  }
+}
 
 /* ════ 教科別 ════ */
 function renderSubjects() {
@@ -781,11 +902,19 @@ window.saveScores = async function() {
   renderSubjects();
   const el = document.getElementById('score-saved'); el.style.display='block'; setTimeout(()=>el.style.display='none',2500);
 };
-window.saveApiKey = function() {
-  const k = document.getElementById('api-inp').value.trim();
-  if (!k) { const st=document.getElementById('api-st'); st.textContent='キーを入力してください'; st.className='api-st err'; return; }
-  setApiKey(k);
-  const st = document.getElementById('api-st'); st.textContent='✓ 保存しました！'; st.className='api-st ok';
+window.saveApiKey = async function() {
+  const inp = document.getElementById('api-inp');
+  const k = inp.value.trim();
+  if (!k || k.startsWith('•')) {
+    const st = document.getElementById('api-st');
+    st.textContent = 'キーを入力してください'; st.className = 'api-st err'; return;
+  }
+  const st = document.getElementById('api-st');
+  st.textContent = '保存中…'; st.className = 'api-st';
+  await fsSet(apiKeyRef(), {key: k});
+  _cachedApiKey = k;
+  inp.value = '••••••••••••••••';
+  st.textContent = '✓ 保存しました！全員の端末で使えるようになります'; st.className = 'api-st ok';
   generateWisdom();
 };
 
@@ -793,11 +922,11 @@ window.saveApiKey = function() {
 function renderSettings() {
   const si = document.getElementById('school-inp'), ed = document.getElementById('exam-inp');
   if (si) si.value = state.school; if (ed) ed.value = state.examDate;
-  const ki = document.getElementById('api-inp'); if (ki && getApiKey()) ki.value = getApiKey();
+  // APIキーはFirestoreから読み込み済みのためここでは何もしない
 }
 
 function renderAll() {
-  updateCD(); renderWeek(); renderSubjects(); renderTimeline(); renderPlan(); renderDiaries(); renderSettings();
+  updateCD(); renderWeek(); renderGraph(); renderSubjects(); renderTimeline(); renderPlan(); renderDiaries(); renderSettings();
 }
 
 /* ════ 起動 ════ */
