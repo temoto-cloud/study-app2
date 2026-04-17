@@ -32,6 +32,20 @@ body{font-family:'Hiragino Kuma Gothic ProN','Hiragino Sans','Yu Gothic',sans-se
 .cd-num{font-size:24px;font-weight:800;color:#D4537E;line-height:1;}
 .cd-lbl{font-size:10px;color:#993556;font-weight:600;margin-top:1px;}
 
+/* 携帯：日記・学びでは大きいヘッダーを隠し、同期バーのみコンパクトに */
+@media(max-width:767px){
+  .app[data-tab="diary"] .school-pill,
+  .app[data-tab="diary"] .header-title,
+  .app[data-tab="diary"] .header-sub,
+  .app[data-tab="diary"] .cd-row,
+  .app[data-tab="learn"] .school-pill,
+  .app[data-tab="learn"] .header-title,
+  .app[data-tab="learn"] .header-sub,
+  .app[data-tab="learn"] .cd-row{display:none;}
+  .app[data-tab="diary"] .header,
+  .app[data-tab="learn"] .header{padding:0.45rem 1rem 0.45rem;}
+}
+
 /* ── ナビ ── */
 nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(env(safe-area-inset-bottom),5px);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;justify-content:space-around;}
 .nb{display:flex;flex-direction:column;align-items:center;gap:1px;padding:3px 5px;cursor:pointer;border:none;background:none;min-width:46px;-webkit-tap-highlight-color:transparent;}
@@ -240,7 +254,7 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
 </style>
 </head>
 <body>
-<div class="app">
+<div class="app" data-tab="home">
 
 <div class="header">
   <div class="school-pill" id="school-pill">🎓 志望校を設定しよう</div>
@@ -606,6 +620,8 @@ function listenComments(diaryId) {
 
 /* ════ タブ切替 ════ */
 function sw(name, el) {
+  const appRoot = document.querySelector('.app');
+  if (appRoot) appRoot.dataset.tab = name;
   document.querySelectorAll('.section').forEach(s => s.classList.remove('on'));
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
   document.getElementById('s-' + name).classList.add('on');
