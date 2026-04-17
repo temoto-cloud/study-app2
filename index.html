@@ -348,7 +348,7 @@ nav{display:flex;background:#fff;border-top:1px solid #e8d5de;padding:5px 0 max(
       <span class="mb" onclick="selMood(this,'fire')">🔥</span>
     </div>
     <textarea class="txa" id="d-inp" placeholder="今日どんな勉強をした？難しかったこと、できたこと、なんでも書いてみよう！"></textarea>
-    <div class="btn-row"><button class="btn btn-pink" onclick="addDiary()">書く ✓</button></div>
+    <div class="btn-row"><button type="button" id="d-submit" class="btn btn-pink" onclick="addDiary()">書く ✓</button></div>
   </div>
   <div id="d-list"></div>
 </div>
@@ -464,6 +464,7 @@ let openDiaryId = null;
 let diaryWhoSel = {};
 let diaries = [];
 let unsubDiaries = null;
+let diarySubmitting = false;
 
 /* ════ 同期ステータス表示 ════ */
 function syncStatus(status) {
@@ -1063,13 +1064,30 @@ window.selMood = function(el, mood) {
   el.classList.add('on'); selectedMood = mood;
 };
 window.addDiary = async function() {
-  const txt = document.getElementById('d-inp').value.trim(); if (!txt) return;
-  const t = new Date(); const days = ['日','月','火','水','木','金','土'];
+  if (diarySubmitting) return;
+  const inp = document.getElementById('d-inp');
+  const btn = document.getElementById('d-submit');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  diarySubmitting = true;
+  if (btn) btn.disabled = true;
+  inp.value = '';
+  const mood = selectedMood;
+  const t = new Date();
+  const days = ['日','月','火','水','木','金','土'];
   const lbl = `${t.getMonth()+1}月${t.getDate()}日（${days[t.getDay()]}）`;
-  const ref = await addDoc(diariesCol(), {date:lbl, mood:selectedMood, text:txt, aiMsg:'', createdAt:t.toISOString()});
-  document.getElementById('d-inp').value = '';
-  openDiaryId = ref.id;
-  if (getApiKey()) window.genDiaryAI(ref.id);
+  let ref = null;
+  try {
+    ref = await addDoc(diariesCol(), {date:lbl, mood, text:txt, aiMsg:'', createdAt:t.toISOString()});
+    openDiaryId = ref.id;
+  } catch (e) {
+    inp.value = txt;
+    syncStatus('err');
+  } finally {
+    diarySubmitting = false;
+    if (btn) btn.disabled = false;
+  }
+  if (ref && getApiKey()) window.genDiaryAI(ref.id);
 };
 window.togglePlan = async function(i) {
   state.plans[i].done = !state.plans[i].done;
