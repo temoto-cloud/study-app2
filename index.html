@@ -478,6 +478,7 @@ let openDiaryId = null;
 let diaryWhoSel = {};
 let diaries = [];
 let unsubDiaries = null;
+let unsubWeek = null;
 let diarySubmitting = false;
 
 /* ════ 同期ステータス表示 ════ */
@@ -569,6 +570,7 @@ async function loadAll() {
   await autoResetPlans();
 
   renderAll();
+  listenWeek();
   listenDiaries();
   if (getApiKey()) {
     generateWisdom();
@@ -591,6 +593,26 @@ async function autoResetPlans() {
     await fsSet(plansRef(), {lastReset: today});
   }
   state.lastPlanReset = today;
+}
+
+/* ════ 今週の勉強時間・カレンダー リアルタイム購読 ════ */
+function applyWeekFromSnap(d) {
+  if (!d) return;
+  if (Array.isArray(d.done)) {
+    state.weekDone = d.done.slice(0, 7);
+    while (state.weekDone.length < 7) state.weekDone.push(false);
+  }
+  if (Array.isArray(d.time)) {
+    state.weekTime = d.time.slice(0, 7).map(n => (typeof n === 'number' && !isNaN(n) ? n : 0));
+    while (state.weekTime.length < 7) state.weekTime.push(0);
+  }
+}
+function listenWeek() {
+  if (unsubWeek) unsubWeek();
+  unsubWeek = onSnapshot(weekRef(), snap => {
+    if (snap.exists()) applyWeekFromSnap(snap.data());
+    renderWeek();
+  }, () => syncStatus('err'));
 }
 
 /* ════ 日記リアルタイム購読 ════ */
